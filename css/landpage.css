@@ -1,0 +1,148 @@
+/* ============================================================================
+ *  OBRAS ANGIRÜ - BITÁCORA DE OBRA
+ *  Landing Page Styles - Versión 3.0.0 (CONSOLIDADA)
+ *  Archivo: child/css/landpage.css
+ *  ============================================================================ */
+
+/* 1. CONTENEDOR PRINCIPAL */
+.obras-landing {
+    margin-top: 40px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 40px 20px !important;
+    max-width: 1400px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 2. LOGO Y TÍTULOS */
+.obras-landing-logo {
+    text-align: center !important;
+    margin: 0 auto 40px auto !important;
+    display: block !important;
+}
+
+.obras-landing-logo img {
+    margin: 0 auto !important;
+    display: block !important;
+    max-width: 280px !important;
+}
+
+.obras-landing h1,
+.obras-landing .subtitle {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+}
+
+/* 3. BOTONES ACCEDER/REGISTRARSE - 432×112px (32.8% de feature) */
+.obras-landing-buttons {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 20px !important;
+    margin: 0 auto 35px auto !important;
+    width: 100% !important;
+    max-width: 900px !important;
+}
+
+.obras-landing-btn {
+    width: 432px !important;
+    height: 112px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.3em !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+}
+
+.obras-landing-btn.login {
+    background: #2271b1 !important;
+    color: white !important;
+}
+
+.obras-landing-btn.register {
+    background: #6c757d !important;
+    color: white !important;
+}
+
+/* 4. GRID FEATURES - 3 COLUMNAS FIJAS (override de custom.css auto-fit) */
+.obras-landing-features {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+    margin: 25px auto 0 auto !important;
+    max-width: 1350px !important;
+}
+
+.obras-feature {
+    background: #2271b1 !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    color: white !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    aspect-ratio: 432 / 343 !important;
+}
+
+.obras-feature .icon {
+    font-size: 3em !important;
+    margin-bottom: 15px !important;
+}
+
+.obras-feature h3 {
+    font-size: 1.3em !important;
+    font-weight: 600 !important;
+    color: white !important;
+    margin-bottom: 8px !important;
+}
+
+.obras-feature p {
+    font-size: 0.96em !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+}
+
+/* 5. BOTÓN 6 - ALIENÍGENA (PÚRPURA) */
+.obras-feature-alien {
+    background: #9b59b6 !important;
+}
+
+.obras-feature-alien:hover {
+    background: #8e44ad !important;
+}
+
+/* 6. FOOTER */
+.obras-landing-footer {
+    margin-top: 40px !important;
+    color: #888 !important;
+    text-align: center !important;
+}
+
+/* 7. RESPONSIVE */
+@media (max-width: 1024px) {
+    .obras-landing-features {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .obras-landing-buttons {
+        flex-direction: column !important;
+        max-width: 432px !important;
+    }
+    .obras-landing-features {
+        grid-template-columns: 1fr !important;
+    }
+}

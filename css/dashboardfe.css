@@ -1,0 +1,376 @@
+/* ============================================================================
+*  OBRAS ANGIRÜ - BITÁCORA DE OBRA
+*  Dashboard Frontend Styles - Específico para Dashboard y Listados
+*  Archivo: child/css/dashboardfe.css
+*  Version: 2.2.0
+*  Usuario: 60+ años, alfabetización digital 15-20%
+*  ============================================================================ */
+
+/* ============================================================================
+*  1. DASHBOARD - CONTENEDOR PRINCIPAL
+*  ============================================================================ */
+.obras-dashboard {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 40px 20px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(34, 113, 177, 0.2) !important;
+    margin: 40px auto !important;
+    max-width: 1400px !important;
+}
+
+/* ============================================================================
+*  2. DASHBOARD - TÍTULOS CENTRADOS
+*  ============================================================================ */
+.obras-dashboard h1 {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: calc(2.5em * var(--scale, 0.88)) !important;
+    color: var(--color-text-primary, #1e1e1e) !important;
+    margin-bottom: var(--space-md, 20px) !important;
+}
+
+.obras-dashboard .welcome {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: calc(1.3em * var(--scale, 0.88)) !important;
+    color: var(--color-primary, #2271b1) !important;
+    margin-bottom: var(--space-md, 20px) !important;
+}
+
+.obras-dashboard > p:not(.welcome) {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: calc(1.1em * var(--scale, 0.88)) !important;
+    color: var(--color-text-secondary, #666) !important;
+    margin-bottom: var(--space-xl, 30px) !important;
+}
+
+/* ============================================================================
+*  3. DASHBOARD - BOTONES GRID 3 COLUMNAS (DIMENSIONES 432x343)
+*  ============================================================================ */
+.obras-buttons {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+    margin: 30px auto 0 auto !important;
+    max-width: 1350px !important;
+    justify-content: center !important;
+    padding: 0 20px !important;
+}
+
+.obras-dashboard .obras-button {
+    width: 432px !important;
+    height: 343px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 40px 20px !important;
+    font-size: 1.4em !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    border: 2px solid transparent !important;
+    margin: 0 auto !important;
+
+    /* reduce al 50%
+
+   transform: scale(0.5);
+   transform-origin: center center; */
+   /* El resto de tus propiedades se mantienen igual */
+
+}
+
+/* Botón Primario (Nueva Entrada) */
+.obras-dashboard .obras-button:not(.secondary) {
+    background: var(--color-primary, #2271b1) !important;
+    color: var(--color-text-on-primary, #ffffff) !important;
+}
+
+.obras-dashboard .obras-button:not(.secondary):hover {
+    background: var(--color-primary-dark, #135e96) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Botones Secundarios */
+.obras-dashboard .obras-button.secondary {
+    background: var(--color-secondary, #6c757d) !important;
+    color: var(--color-text-on-primary, #ffffff) !important;
+}
+
+.obras-dashboard .obras-button.secondary:hover {
+    background: var(--color-secondary-dark, #5a6268) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.obras-dashboard .obras-button .icon {
+    font-size: 3em !important;
+    margin-bottom: 15px !important;
+    display: block !important;
+}
+
+/* ============================================================================
+*  4. LISTADOS FRONTEND - ESTILOS
+*  ============================================================================ */
+.obras-lista {
+    max-width: 900px !important;
+    margin: var(--space-xxl, 40px) auto !important;
+    padding: var(--space-md, 20px) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(34, 113, 177, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 12px !important;
+}
+
+.obras-lista h1 {
+    font-size: calc(1.8em * var(--scale, 0.88)) !important;
+    margin-bottom: var(--space-md, 20px) !important;
+    color: var(--color-text-primary, #1e1e1e) !important;
+    text-align: center !important;
+}
+
+.obras-lista .item {
+    background: var(--color-bg-light, #ffffff) !important;
+    padding: calc(15px * var(--scale, 0.88)) calc(20px * var(--scale, 0.88)) !important;
+    margin-bottom: calc(10px * var(--scale, 0.88)) !important;
+    border-left: 4px solid var(--color-primary, #2271b1) !important;
+    border-radius: var(--border-radius-sm, 4px) !important;
+    box-shadow: var(--shadow-sm, 0 2px 4px rgba(0, 0, 0, 0.05)) !important;
+}
+
+.obras-lista .item h3 {
+    margin: 0 0 var(--space-xs, 5px) 0 !important;
+    font-size: calc(1.1em * var(--scale, 0.88)) !important;
+}
+
+.obras-lista .item h3 a {
+    color: var(--color-primary, #2271b1) !important;
+    text-decoration: none !important;
+}
+
+.obras-lista .item h3 a:hover {
+    text-decoration: underline !important;
+}
+
+.obras-lista .item .meta,
+.obras-lista .item .tipo {
+    font-size: calc(0.9em * var(--scale, 0.88)) !important;
+    color: var(--color-text-secondary, #666) !important;
+}
+
+.obras-lista .item .tipo {
+    background: #e9ecef !important;
+    padding: var(--space-xs, 3px) var(--space-sm, 8px) !important;
+    border-radius: var(--border-radius-sm, 3px) !important;
+    display: inline-block !important;
+    margin-left: var(--space-sm, 10px) !important;
+}
+
+.obras-lista .empty {
+    text-align: center !important;
+    color: var(--color-text-secondary, #666) !important;
+    padding: var(--space-xxl, 40px) !important;
+}
+
+.obras-lista .back-link {
+    display: inline-block !important;
+    margin-top: var(--space-md, 20px) !important;
+    color: var(--color-primary, #2271b1) !important;
+    text-decoration: none !important;
+}
+
+.obras-lista .back-link:hover {
+    text-decoration: underline !important;
+}
+
+/* Variantes por tipo de listado */
+.obras-lista .item[data-type="documento"] {
+    border-left-color: #6c757d !important;
+}
+
+.obras-lista .item[data-type="material"] {
+    border-left-color: #28a745 !important;
+}
+
+/* ============================================================================
+*  5. MENÚ LOGOUT FRONTAL
+*  ============================================================================ */
+.obras-user-menu {
+    position: fixed;
+    top: calc(20px * var(--scale, 0.88)) !important;
+    right: calc(20px * var(--scale, 0.88)) !important;
+    z-index: 9999;
+}
+
+.obras-user-info {
+    background: var(--color-primary, #2271b1);
+    color: var(--color-text-on-primary, #ffffff);
+    padding: calc(10px * var(--scale, 0.88)) calc(20px * var(--scale, 0.88)) !important;
+    border-radius: calc(5px * var(--scale, 0.88)) !important;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs, 10px);
+    box-shadow: 0 2px 8px rgba(34, 113, 177, 0.3);
+}
+
+.obras-user-info:hover {
+    background: var(--color-primary-dark, #135e96);
+}
+
+.obras-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--space-md, 10px);
+    background: var(--color-bg-light, #ffffff);
+    box-shadow: var(--shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.15));
+    border-radius: var(--border-radius-sm, 5px);
+    min-width: 200px;
+    overflow: hidden;
+    border: 1px solid rgba(34, 113, 177, 0.2);
+}
+
+.obras-dropdown.show {
+    display: block;
+}
+
+.obras-dropdown a {
+    display: block;
+    padding: calc(12px * var(--scale, 0.88)) calc(20px * var(--scale, 0.88)) !important;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+}
+
+.obras-dropdown a:hover {
+    background: #f9f9f9;
+}
+
+.obras-dropdown a.logout {
+    color: var(--color-error, #d63638);
+    background: #fff5f5;
+}
+
+.obras-dropdown a.logout:hover {
+    background: #ffe5e5;
+}
+
+.obras-login-link {
+    color: var(--color-primary, #2271b1);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.obras-login-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================================
+*  6. SINGLE BITÁCORA - CONTENEDOR
+*  ============================================================================ */
+body.logged-in .single-bitacora-container {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(34, 113, 177, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 40px 20px !important;
+    margin: 40px auto !important;
+    max-width: 900px !important;
+}
+
+body.logged-in .single-bitacora h1 {
+    color: var(--color-text-primary, #1e1e1e) !important;
+    text-align: center !important;
+}
+
+/* ============================================================================
+*  7. ACF BOX - CAMPOS PERSONALIZADOS
+*  ============================================================================ */
+.obras-acf-box {
+    background: #f9f9f9 !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    margin: 20px 0 !important;
+}
+
+.obras-acf-box h3 {
+    margin-top: 0 !important;
+    margin-bottom: 15px !important;
+    color: var(--color-primary, #2271b1) !important;
+    font-size: 1.2em !important;
+}
+
+.obras-acf-box p {
+    margin: 8px 0 !important;
+    color: #333 !important;
+}
+
+.obras-acf-box.bitacora {
+    border-left: 4px solid #2271b1 !important;
+}
+
+.obras-acf-box.documento {
+    border-left: 4px solid #6c757d !important;
+}
+
+.obras-acf-box.material {
+    border-left: 4px solid #28a745 !important;
+}
+
+/* ============================================================================
+*  8. RESPONSIVE - MÓVIL (≤768px)
+*  ============================================================================ */
+@media (max-width: 768px) {
+    .obras-dashboard {
+        padding: 30px 15px !important;
+        margin: 30px 10px !important;
+        max-width: 100% !important;
+    }
+
+    .obras-dashboard h1 {
+        font-size: calc(1.8em * var(--scale, 0.88)) !important;
+    }
+
+    .obras-buttons {
+        grid-template-columns: 1fr !important;
+        margin: 30px 10px 0 10px !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .obras-dashboard .obras-button {
+        width: 100% !important;
+        max-width: 432px !important;
+        height: auto !important;
+        min-height: 200px !important;
+        padding: 30px 20px !important;
+        margin: 0 auto !important;
+    }
+
+    .obras-lista {
+        padding: var(--space-lg, 25px) 15px !important;
+        margin: var(--space-lg, 25px) 10px !important;
+    }
+
+    .single-bitacora-container {
+        padding: 30px 15px !important;
+        margin: 30px 10px !important;
+    }
+}
+
+/* ============================================================================
+*  FIN DE ARCHIVO - dashboardfe.css (Dashboard Frontend) v2.2.0
+*  ============================================================================ */
