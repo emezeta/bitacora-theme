@@ -1,63 +1,53 @@
 /* ============================================================================
-*  OBRAS ANGIRÜ - BITÁCORA DE OBRA
-*  Custom Styles - Parte Común (Landing + Dashboard)
-*  Archivo: child/css/custom.css
-*  Version: 2.1.0
-*  Usuario: 60+ años, alfabetización digital 15-20%
-*  Principio: "Ausencia de fricción > Pureza técnica"
-*  ============================================================================ */
+ *  OBRAS ANGIRÜ - BITÁCORA DE OBRA
+ *  Custom Styles - Parte Común (Landing + Dashboard)
+ *  Archivo: child/css/custom.css
+ *  Version: 2.3.1
+ *  Usuario: 60+ años, alfabetización digital 15-20%
+ *  Principio: "Ausencia de fricción > Pureza técnica"
+ *  ============================================================================ */
 
 /* ============================================================================
-*  1. VARIABLES GLOBALES - ÚNICA DECLARACIÓN
-*  ============================================================================ */
+ *  1. VARIABLES GLOBALES - ÚNICA DECLARACIÓN
+ *  ============================================================================ */
 :root {
-  /* Escala global para ajuste fino en usuarios 60+ */
   --scale: 0.88;
-  
-  /* Colores primarios */
+
   --color-primary: #2271b1;
   --color-primary-dark: #135e96;
   --color-primary-hover: color-mix(in srgb, var(--color-primary) 85%, transparent);
-  
-  /* Colores secundarios */
+
   --color-secondary: #6c757d;
   --color-secondary-dark: #5a6268;
-  
-  /* Fondos */
+
   --color-bg-light: #ffffff;
   --color-bg-soft: #f5f5f5;
   --color-bg-dashboard: rgba(34, 113, 177, 0.08);
-  
-  /* Texto */
+
   --color-text-primary: #1e1e1e;
   --color-text-secondary: #666666;
   --color-text-muted: #888888;
   --color-text-on-primary: #ffffff;
-  
-  /* Estados */
+
   --color-success: #00a32a;
   --color-error: #d63638;
-  
-  /* Sombras */
+
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
-  
-  /* Bordes */
+
   --border-radius-sm: 4px;
   --border-radius-base: 8px;
   --border-radius-lg: 12px;
-  
-  /* Espaciados base (escalables con --scale) */
+
   --space-xs: calc(10px * var(--scale));
   --space-sm: calc(15px * var(--scale));
   --space-md: calc(20px * var(--scale));
   --space-lg: calc(25px * var(--scale));
   --space-xl: calc(30px * var(--scale));
   --space-xxl: calc(40px * var(--scale));
-  
-  /* Tipografía base */
+
   --font-size-sm: calc(0.9em * var(--scale));
   --font-size-base: calc(1em * var(--scale));
   --font-size-lg: calc(1.3em * var(--scale));
@@ -65,15 +55,17 @@
   --font-size-xxl: calc(2.5em * var(--scale));
 }
 
+
+
+
 /* ============================================================================
-*  2. LOGIN / REGISTER - WORDPRESS DEFAULT PAGES
-*  ============================================================================ */
+ *  2. LOGIN / REGISTER - WORDPRESS DEFAULT PAGES
+ *  ============================================================================ */
 body.login,
 body.register {
   background: var(--color-bg-light) !important;
 }
 
-/* Logo personalizado - override del logo de WordPress */
 .login h1 a,
 .register h1 a {
   background-image: url('../images/login_obras.png') !important;
@@ -86,7 +78,6 @@ body.register {
   display: block !important;
 }
 
-/* Formulario */
 .login form,
 .register form {
   background: var(--color-bg-light) !important;
@@ -97,7 +88,6 @@ body.register {
   margin-top: var(--space-md) !important;
 }
 
-/* Inputs */
 .login input[type="text"],
 .login input[type="password"],
 .login input[type="email"],
@@ -112,17 +102,12 @@ body.register {
   box-sizing: border-box !important;
 }
 
-.login input[type="text"]:focus,
-.login input[type="password"]:focus,
-.login input[type="email"]:focus,
-.register input[type="text"]:focus,
-.register input[type="password"]:focus,
-.register input[type="email"]:focus {
+.login input:focus,
+.register input:focus {
   border-color: var(--color-primary) !important;
   box-shadow: 0 0 0 1px var(--color-primary) !important;
 }
 
-/* Botones WordPress nativos */
 .wp-core-ui .button-primary {
   background: var(--color-primary) !important;
   border-color: var(--color-primary) !important;
@@ -134,169 +119,113 @@ body.register {
   border-color: var(--color-primary-dark) !important;
 }
 
-/* Mensajes de estado */
-.login #login_error,
-.login .message,
-.login .success {
-  border-left: 4px solid var(--color-primary);
-  border-radius: var(--border-radius-sm);
-  padding: var(--space-sm);
-  margin-bottom: var(--space-md);
-}
-
-.login .success {
-  border-left-color: var(--color-success);
-  background: #f0fff0;
-}
-
-/* Responsive login */
-@media (max-width: 782px) {
-  .login h1 a,
-  .register h1 a {
-    width: 320px !important;
-    height: 160px !important;
-  }
-  #login {
-    max-width: 500px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login h1 a,
-  .register h1 a {
-    width: 260px !important;
-    height: 130px !important;
-  }
-  #login {
-    max-width: 100% !important;
-    padding: 10% 5% 0 !important;
-  }
-}
-
 /* ============================================================================
-*  3. BOTONES - SISTEMA UNIFICADO (BASE + MODIFICADORES)
-*  ÚNICA DECLARACIÓN DE APARIENCIA DE BOTONES
-*  ============================================================================ */
-
-/* Clase base para TODOS los botones de Bitácora */
+ *  3. BOTONES FUNCIONALES - APARIENCIA COMÚN
+ *  ============================================================================ */
 .obras-btn,
 .obras-button,
 .obras-landing-btn {
-  display: inline-flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: var(--space-xs) !important;
-  padding: var(--space-lg) var(--space-md) !important;
-  font-size: var(--font-size-lg) !important;
-  font-weight: 600 !important;
-  text-decoration: none !important;
-  border-radius: var(--border-radius-base) !important;
-  border: 2px solid transparent !important;
-  cursor: pointer !important;
-  transition: all 0.3s ease !important;
-  box-shadow: var(--shadow-base) !important;
-  min-width: 180px !important;
-  min-height: 180px !important;
-  aspect-ratio: 1 / 1 !important;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  border-radius: var(--border-radius-base);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-base);
 }
 
-/* Variante primaria (azul) - acciones principales */
-.obras-btn--primary,
-.obras-button,
-.obras-landing-btn.login {
-  background: var(--color-primary) !important;
-  color: var(--color-text-on-primary) !important;
+.obras-button {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
 }
 
-.obras-btn--primary:hover,
-.obras-button:hover,
-.obras-landing-btn.login:hover {
-  background: var(--color-primary-dark) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: var(--shadow-hover) !important;
+.obras-button:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
-/* Variante secundaria (gris) - acciones complementarias */
-.obras-btn--secondary,
-.obras-button.secondary,
-.obras-landing-btn.register {
-  background: var(--color-secondary) !important;
-  color: var(--color-text-on-primary) !important;
+.obras-button.secondary {
+  background: var(--color-secondary);
 }
 
-.obras-btn--secondary:hover,
-.obras-button.secondary:hover,
-.obras-landing-btn.register:hover {
-  background: var(--color-secondary-dark) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: var(--shadow-hover) !important;
+.obras-button.secondary:hover {
+  background: var(--color-secondary-dark);
 }
 
-/* Icono dentro del botón */
+/* ============================================================================
+ *  4. COMPONENTE VISUAL UNIFICADO: CARD
+ *  Aplica a los 6 bloques de landing y a los 6 botones del dashboard
+ *  ============================================================================ */
+.obras-feature,
+.obras-button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 260px;
+  aspect-ratio: 432 / 343;
+  padding: 20px;
+  margin: 0;
+
+  text-align: center;
+  line-height: 1.35;
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--shadow-base);
+}
+
+/* variante primaria compartida */
+.obras-feature,
+.obras-button {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+/* hover compartido */
+.obras-feature:hover,
+.obras-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.obras-feature:hover {
+  background: var(--color-primary-dark);
+}
+
+/* iconos */
 .obras-btn .icon,
 .obras-button .icon,
 .obras-landing-btn .icon,
 .obras-feature .icon {
-  font-size: calc(2.5em * var(--scale)) !important;
-  display: block !important;
-  margin-bottom: var(--space-xs) !important;
+  display: block;
+  margin-bottom: 15px;
+  font-size: 3em;
 }
 
-/* Contenedores de botones - FILA (Landing) */
-.obras-btn-group--row,
-.obras-landing-buttons {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: var(--space-md) !important;
-  width: 100% !important;
-  max-width: 650px !important;
-  margin: 0 auto var(--space-xl) auto !important;
-  flex-wrap: wrap !important;
+/* títulos y textos de las cards informativas */
+.obras-feature h3 {
+  margin: 0 0 8px;
+  font-size: 1.3em;
+  font-weight: 600;
+  color: var(--color-text-on-primary);
 }
 
-/* Contenedores de botones - GRID (Dashboard) */
-.obras-btn-group--grid,
-.obras-buttons,
-.obras-landing-features {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
-  gap: var(--space-md) !important;
-  width: 100% !important;
-  max-width: 1000px !important;
-  margin: var(--space-xl) auto 0 auto !important;
-  justify-content: center !important;
-}
-
-/* Responsive móvil - Base común */
-@media (max-width: 768px) {
-  .obras-btn-group--row,
-  .obras-landing-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-    max-width: 280px !important;
-  }
-  
-  .obras-btn,
-  .obras-button,
-  .obras-landing-btn {
-    width: 100% !important;
-    max-width: 280px !important;
-    min-height: 160px !important;
-  }
-  
-  .obras-btn-group--grid,
-  .obras-buttons {
-    grid-template-columns: 1fr !important;
-    max-width: 350px !important;
-  }
+.obras-feature p {
+  margin: 0;
+  font-size: 0.96em;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ============================================================================
-*  4. KIOSK MODE - OCULTAR ELEMENTOS INNECESARIOS
-*  ============================================================================ */
+ *  5. KIOSK MODE
+ *  ============================================================================ */
 .notice,
 .update-nag,
 .updated,
@@ -306,46 +235,26 @@ body.register {
 }
 
 /* ============================================================================
-*  5. RESPONSIVE - MÓVIL (≤768px) - BASE COMÚN
-*  ============================================================================ */
+ *  6. RESPONSIVE BASE
+ *  ============================================================================ */
 @media (max-width: 768px) {
-  /* Botones en columna */
-  .obras-btn-group--row,
-  .obras-landing-buttons {
-    flex-direction: column !important;
-    align-items: center !important;
-    max-width: 280px !important;
-  }
-  
-  .obras-btn--landing,
-  .obras-landing-btn {
-    width: 100% !important;
-    max-width: 280px !important;
-  }
-  
-  /* Features en una columna */
-  .obras-landing-features {
-    grid-template-columns: 1fr !important;
-    gap: var(--space-md) !important;
-  }
-  
-  .obras-feature {
-    max-width: 100% !important;
-  }
-  
-  /* Dashboard */
-  .obras-dashboard,
-  .obras-lista {
-    padding: var(--space-lg) !important;
-    margin: var(--space-lg) auto !important;
-  }
-  
-  .obras-btn-group--grid,
-  .obras-buttons {
-    grid-template-columns: 1fr !important;
+    .obras-feature {
+    max-width: 100%;
   }
 }
 
+
+/* FIX GLOBAL:
+neutraliza el comportamiento full-width problemático del contenido principal
+en entradas/documentos heredado del parent block theme */
+.entry-content.alignfull.wp-block-post-content {
+  box-sizing: border-box;
+  width: min(95vw, var(--wp--style--global--content-size)) !important;
+  max-width: var(--wp--style--global--content-size) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 /* ============================================================================
-*  FIN DE ARCHIVO - custom.css (Parte Común) v2.1
-*  ============================================================================ */
+ *  FIN
+ *  ============================================================================ */

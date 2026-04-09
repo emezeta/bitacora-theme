@@ -71,7 +71,7 @@
       ]
     },
     "spacing": {
-      "units": ["px", "rem", "%", "vw", "vh"],
+      "units": [ "px", "rem", "%", "vw", "vh" ],
       "blockGap": "1.5rem",
       "padding": true,
       "margin": true,
@@ -259,19 +259,6 @@
           "lineHeight": "1.2"
         }
       },
-      "core/post-content": {
-        "layout": {
-          "contentSize": "900px",
-          "wideSize": "1200px"
-        },
-        "spacing": {
-          "padding": {
-            "left": "0",
-            "right": "0"
-          },
-          "blockGap": "1.5rem"
-        }
-      },
       "core/paragraph": {
         "typography": {
           "fontSize": "var(--wp--preset--font-size--base)",
@@ -292,10 +279,6 @@
         }
       },
       "core/group": {
-        "layout": {
-          "contentSize": "900px",
-          "wideSize": "1200px"
-        },
         "spacing": {
           "padding": {
             "left": "0",
