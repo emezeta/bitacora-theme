@@ -17,35 +17,71 @@ function obras_block_admin_access() {
     $post_type = isset( $_GET['post_type'] ) ? sanitize_key( $_GET['post_type'] ) : '';
     $post_id   = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
 
-    // Páginas permitidas para usuarios no admin
+    $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
+
+    // =========================================================================
+    // Páginas base permitidas para usuarios no admin
+    // =========================================================================
     $allowed_pages = array(
         'profile.php',
         'user-edit.php',
+
+        // Biblioteca / subida de medios
+        'upload.php',
+        'media-new.php',
+        'async-upload.php',
+        'media-upload.php',
     );
 
     if ( in_array( $current, $allowed_pages, true ) ) {
         return;
     }
 
-    // Permitir crear contenido de los CPT del sistema
-    if ( $current === 'post-new.php' && in_array( $post_type, array( 'bitacora', 'documento_obra', 'material_obra' ), true ) ) {
+    // =========================================================================
+    // Crear contenido de los CPT del sistema
+    // =========================================================================
+    if ( $current === 'post-new.php' && in_array( $post_type, $allowed_post_types, true ) ) {
         return;
     }
 
-    // Permitir editar contenido existente de los CPT del sistema
+    // =========================================================================
+    // Editar contenido existente de los CPT del sistema
+    // =========================================================================
     if ( $current === 'post.php' && $post_id ) {
         $edit_post_type = get_post_type( $post_id );
 
-        if ( in_array( $edit_post_type, array( 'bitacora', 'documento_obra', 'material_obra' ), true ) ) {
+        if ( in_array( $edit_post_type, $allowed_post_types, true ) ) {
             return;
         }
     }
 
-    // Permitir listados admin de los CPT del sistema
-    if ( $current === 'edit.php' && in_array( $post_type, array( 'bitacora', 'documento_obra', 'material_obra' ), true ) ) {
+    // =========================================================================
+    // Listados admin de los CPT del sistema
+    // =========================================================================
+    if ( $current === 'edit.php' && in_array( $post_type, $allowed_post_types, true ) ) {
         return;
     }
 
+    // =========================================================================
+    // Adjuntar / seleccionar medios desde pantallas de edición de los CPT
+    // =========================================================================
+    if ( $current === 'post.php' || $current === 'post-new.php' ) {
+        if ( $post_id ) {
+            $edit_post_type = get_post_type( $post_id );
+
+            if ( in_array( $edit_post_type, $allowed_post_types, true ) ) {
+                return;
+            }
+        }
+
+        if ( in_array( $post_type, $allowed_post_types, true ) ) {
+            return;
+        }
+    }
+
+    // =========================================================================
+    // Cualquier otra cosa: afuera
+    // =========================================================================
     if ( ! headers_sent() ) {
         wp_redirect( home_url( '/' ) );
         exit;

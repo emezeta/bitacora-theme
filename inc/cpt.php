@@ -7,14 +7,24 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+
 // "Bitácora"
 function obras_register_bitacora_cpt() {
     register_post_type( 'bitacora', array(
         'labels' => array(
-            'name' => 'Bitácora',
-            'singular_name' => 'Entrada',
-            'add_new' => 'Nueva Entrada',
-            'menu_name' => 'Bitácora',
+            'name'                  => 'Notas',
+            'singular_name'         => 'Nota',
+            'menu_name'             => 'Bitácora',
+            'name_admin_bar'        => 'Nota',
+            'add_new'               => 'Nueva nota',
+            'add_new_item'          => 'Agrega nota nueva',
+            'new_item'              => 'Nueva nota',
+            'edit_item'             => 'Editar nota',
+            'view_item'             => 'Ver nota',
+            'all_items'             => 'Notas',
+            'search_items'          => 'Buscar notas',
+            'not_found'             => 'No se encontraron notas',
+            'not_found_in_trash'    => 'No se encontraron notas en la papelera',
         ),
         'public' => true,
         'has_archive' => true,

@@ -2,7 +2,7 @@
  *  OBRAS ANGIRÜ - BITÁCORA DE OBRA
  *  Custom Styles - Parte Común (Landing + Dashboard)
  *  Archivo: child/css/custom.css
- *  Version: 2.3.1
+ *  Version: 2.4.2
  *  Usuario: 60+ años, alfabetización digital 15-20%
  *  Principio: "Ausencia de fricción > Pureza técnica"
  *  ============================================================================ */
@@ -55,15 +55,14 @@
   --font-size-xxl: calc(2.5em * var(--scale));
 }
 
-
-
-
 /* ============================================================================
  *  2. LOGIN / REGISTER - WORDPRESS DEFAULT PAGES
+ *  El logo se define acá (CSS) para asegurar consistencia en wp-login.php
  *  ============================================================================ */
+
 body.login,
 body.register {
-  background: var(--color-bg-light) !important;
+  background: var(--color-bg-light);
 }
 
 .login h1 a,
@@ -72,20 +71,20 @@ body.register {
   background-size: contain !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  width: 320px !important;
-  height: 160px !important;
-  margin: 0 auto var(--space-xl) !important;
+  width: 220px !important;
+  height: 90px !important;
+  margin: 0 auto 20px !important;
   display: block !important;
 }
 
 .login form,
 .register form {
-  background: var(--color-bg-light) !important;
-  border: 1px solid #e0e0e0 !important;
-  border-radius: var(--border-radius-base) !important;
-  box-shadow: var(--shadow-hover) !important;
-  padding: var(--space-xl) !important;
-  margin-top: var(--space-md) !important;
+  background: var(--color-bg-light);
+  border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--shadow-hover);
+  padding: var(--space-xl);
+  margin-top: var(--space-md);
 }
 
 .login input[type="text"],
@@ -94,29 +93,29 @@ body.register {
 .register input[type="text"],
 .register input[type="password"],
 .register input[type="email"] {
-  border: 1px solid #ddd !important;
-  border-radius: var(--border-radius-sm) !important;
-  padding: var(--space-sm) !important;
-  font-size: var(--font-size-base) !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-sm);
+  font-size: var(--font-size-base);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login input:focus,
 .register input:focus {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 1px var(--color-primary) !important;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
 }
 
 .wp-core-ui .button-primary {
-  background: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  box-shadow: var(--shadow-sm) !important;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .wp-core-ui .button-primary:hover {
-  background: var(--color-primary-dark) !important;
-  border-color: var(--color-primary-dark) !important;
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
 }
 
 /* ============================================================================
@@ -225,28 +224,22 @@ body.register {
 
 /* ============================================================================
  *  5. KIOSK MODE
+ *  Limpieza:
+ *  la ocultación agresiva por CSS se retiró; esto se sostiene por PHP/hooks.
  *  ============================================================================ */
-.notice,
-.update-nag,
-.updated,
-#wp-admin-bar-updates,
-.screen-reader-text:not(.skip-link) {
-  display: none !important;
-}
 
 /* ============================================================================
  *  6. RESPONSIVE BASE
  *  ============================================================================ */
 @media (max-width: 768px) {
-    .obras-feature {
+  .obras-feature {
     max-width: 100%;
   }
 }
 
-
 /* FIX GLOBAL:
-neutraliza el comportamiento full-width problemático del contenido principal
-en entradas/documentos heredado del parent block theme */
+ n eutraliza el comportamiento full-width problemático del contenido principal       *
+ en entradas/documentos heredado del parent block theme */
 .entry-content.alignfull.wp-block-post-content {
   box-sizing: border-box;
   width: min(95vw, var(--wp--style--global--content-size)) !important;

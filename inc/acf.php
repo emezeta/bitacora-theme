@@ -70,7 +70,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'archivo_documento',
                 'type' => 'file',
                 'return_format' => 'array',
-                'required' => 1,
+                'required' => 0,
             ),
         ),
         'location' => array(
