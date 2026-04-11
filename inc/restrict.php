@@ -28,6 +28,13 @@ function obras_restrict_pages() {
             }
         }
     }
+    // Bloquear acceso directo a CPT si no está logueado
+    if ( is_singular( array( 'bitacora', 'documento_obra', 'material_obra' ) ) ) {
+        if ( ! is_user_logged_in() ) {
+            wp_redirect( wp_login_url( get_permalink() ) );
+            exit;
+        }
+    }
 }
 
 add_filter( 'wp_nav_menu_objects', 'obras_filter_menu', 10, 2 );
@@ -57,12 +64,4 @@ function obras_filter_menu( $items, $args ) {
     }
 
     return $items;
-}
-
-// Bloquear acceso directo a CPT si no está logueado
-if ( is_singular( array( 'bitacora', 'documento_obra', 'material_obra' ) ) ) {
-    if ( ! is_user_logged_in() ) {
-        wp_redirect( wp_login_url( get_permalink() ) );
-        exit;
-    }
 }
