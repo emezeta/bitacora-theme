@@ -114,6 +114,13 @@ function obras_render_lista_entradas() {
                         <span class="fecha">📅 <?php echo esc_html( get_post_meta( get_the_ID(), 'fecha_obra', true ) ?: get_the_date( 'd/m/Y' ) ); ?></span>
                         <span class="author">✍️ <?php echo esc_html( get_the_author() ); ?></span>
                     </div>
+
+                    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
+                        <div class="obras-item-actions">
+                            <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>">Editar</a>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
             <?php endwhile; wp_reset_postdata(); ?>
         <?php else : ?>
@@ -152,6 +159,13 @@ function obras_render_lista_documentos() {
                     <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                     <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_documento', true ) ?: 'Documento' ); ?></span>
                 </div>
+
+                <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
+                    <div class="obras-item-actions">
+                        <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>">Editar</a>
+                    </div>
+                <?php endif; ?>
+
             <?php endwhile; wp_reset_postdata(); ?>
         <?php else : ?>
             <p class="empty">Aún no hay documentos.</p>
