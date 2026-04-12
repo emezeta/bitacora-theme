@@ -75,7 +75,7 @@ function obras_render_landing_page() {
             <div class="obras-feature obras-feature-alien obras-feature-locked" tabindex="0" role="button" aria-label="Acceso restringido">
                 <span class="icon">🛸</span>
                 <h3>Placeholder</h3>
-                <p>Botón temporal - modificar landing.php +66</p>
+                <p>Botón temporal - landing.php : obras-feature-alien</p>
             </div>
         </div>
 

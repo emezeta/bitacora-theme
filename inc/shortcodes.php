@@ -9,6 +9,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 // ============================================================================
+// === ACCIONES FRONTEND SOBRE POSTS ==========================================
+// ============================================================================
+
+add_action( 'admin_post_obras_trash_post', 'obras_handle_frontend_trash_post' );
+function obras_handle_frontend_trash_post() {
+    if ( ! is_user_logged_in() ) {
+        wp_die( 'Acceso no autorizado.' );
+    }
+
+    $post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
+    if ( ! $post_id ) {
+        wp_die( 'Post inválido.' );
+    }
+
+    if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'obras_trash_post_' . $post_id ) ) {
+        wp_die( 'Nonce inválido.' );
+    }
+
+    $post = get_post( $post_id );
+    if ( ! $post ) {
+        wp_die( 'Post no encontrado.' );
+    }
+
+    $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
+    if ( ! in_array( $post->post_type, $allowed_post_types, true ) ) {
+        wp_die( 'Tipo de contenido no permitido.' );
+    }
+
+    if ( (int) $post->post_author !== get_current_user_id() && ! current_user_can( 'delete_post', $post_id ) ) {
+        wp_die( 'No tienes permiso para mover este contenido a la papelera.' );
+    }
+
+    wp_trash_post( $post_id );
+
+    $redirect = wp_get_referer();
+    if ( ! $redirect ) {
+        $redirect = home_url( '/' );
+    }
+
+    wp_safe_redirect( $redirect );
+    exit;
+}
+
+
+// ============================================================================
 // === SHORTCODES FRONTEND ====================================================
 // ============================================================================
 
@@ -26,6 +71,35 @@ function obras_render_lista_actions( $new_url, $new_label ) {
     <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
     style="display:inline-block; padding:12px 20px; background:#6c757d; color:#fff; text-decoration:none; border-radius:8px; font-weight:600;">
     Volver al inicio
+    </a>
+    </div>
+    <?php
+}
+
+/**
+ * Renderiza acciones por item para el autor.
+ */
+function obras_render_item_actions( $post_id ) {
+    if ( get_current_user_id() !== (int) get_post_field( 'post_author', $post_id ) ) {
+        return;
+    }
+
+    $edit_url  = get_edit_post_link( $post_id );
+    $trash_url = wp_nonce_url(
+        admin_url( 'admin-post.php?action=obras_trash_post&post_id=' . $post_id ),
+                              'obras_trash_post_' . $post_id
+    );
+    ?>
+    <div style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
+    <a href="<?php echo esc_url( $edit_url ); ?>"
+    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
+    ✏️ Editar
+    </a>
+
+    <a href="<?php echo esc_url( $trash_url ); ?>"
+    onclick="return confirm('¿Seguro que quieres mover este contenido a la papelera?');"
+    style="font-size:0.9em; color:#d63638; text-decoration:none;">
+    🗑 Mover a papelera
     </a>
     </div>
     <?php
@@ -120,14 +194,7 @@ function obras_render_lista_entradas() {
     <span class="author">✍️ <?php echo esc_html( get_the_author() ); ?></span>
     </div>
 
-    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
-    <div style="margin-top:10px;">
-    <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>"
-    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
-    ✏️ Editar
-    </a>
-    </div>
-    <?php endif; ?>
+    <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
     <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
@@ -171,14 +238,7 @@ function obras_render_lista_documentos() {
 
     <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_documento', true ) ?: 'Documento' ); ?></span>
 
-    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
-    <div style="margin-top:10px;">
-    <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>"
-    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
-    ✏️ Editar
-    </a>
-    </div>
-    <?php endif; ?>
+    <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
     <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
@@ -222,14 +282,7 @@ function obras_render_lista_materiales() {
 
     <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Material' ); ?></span>
 
-    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
-    <div style="margin-top:10px;">
-    <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>"
-    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
-    ✏️ Editar
-    </a>
-    </div>
-    <?php endif; ?>
+    <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
     <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
@@ -280,14 +333,7 @@ function obras_render_lista_catalogos() {
 
     <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Catálogo' ); ?></span>
 
-    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
-    <div style="margin-top:10px;">
-    <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>"
-    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
-    ✏️ Editar
-    </a>
-    </div>
-    <?php endif; ?>
+    <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
     <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
@@ -338,14 +384,7 @@ function obras_render_lista_planos() {
 
     <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Plano' ); ?></span>
 
-    <?php if ( get_current_user_id() === (int) get_post_field( 'post_author', get_the_ID() ) ) : ?>
-    <div style="margin-top:10px;">
-    <a href="<?php echo esc_url( get_edit_post_link( get_the_ID() ) ); ?>"
-    style="font-size:0.9em; color:#2271b1; text-decoration:none;">
-    ✏️ Editar
-    </a>
-    </div>
-    <?php endif; ?>
+    <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
     <?php endwhile; wp_reset_postdata(); ?>
     <?php else : ?>
