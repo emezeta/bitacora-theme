@@ -71,8 +71,8 @@ body.register {
   background-size: contain !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  width: 220px !important;
-  height: 90px !important;
+  width: 320px !important;
+  height: 130px !important;
   margin: 0 auto 20px !important;
   display: block !important;
 }
