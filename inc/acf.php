@@ -6,6 +6,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
 // ============================================================================
 // === ACF: CAMPOS VÍA CÓDIGO (sin UI) ========================================
 // ============================================================================
@@ -97,11 +98,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'tipo_material',
                 'type' => 'select',
                 'choices' => array(
-                    'foto' => 'Foto',
-                    'video' => 'Video',
-                    'muestra' => 'Muestra',
+                    'foto'     => 'Foto',
+                    'video'    => 'Video',
+                    'muestra'  => 'Muestra',
                     'catalogo' => 'Catálogo',
-                    'plano' => 'Plano',
+                    'plano'    => 'Plano',
                 ),
             ),
             array(
@@ -132,4 +133,37 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
         'label_placement' => 'top',
     ) );
 
-    endif;
+endif;
+
+
+// ============================================================================
+// === PRECARGAR tipo_material DESDE URL EN NUEVO MATERIAL ====================
+// ============================================================================
+
+add_filter( 'acf/load_value/name=tipo_material', 'obras_prefill_tipo_material_from_url', 10, 3 );
+function obras_prefill_tipo_material_from_url( $value, $post_id, $field ) {
+    if ( ! is_admin() ) {
+        return $value;
+    }
+
+    if ( ! empty( $value ) ) {
+        return $value;
+    }
+
+    if ( empty( $_GET['post_type'] ) || 'material_obra' !== $_GET['post_type'] ) {
+        return $value;
+    }
+
+    if ( empty( $_GET['tipo_material'] ) ) {
+        return $value;
+    }
+
+    $allowed = array( 'foto', 'video', 'muestra', 'catalogo', 'plano' );
+    $tipo    = sanitize_key( wp_unslash( $_GET['tipo_material'] ) );
+
+    if ( in_array( $tipo, $allowed, true ) ) {
+        return $tipo;
+    }
+
+    return $value;
+}

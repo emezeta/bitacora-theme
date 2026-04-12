@@ -225,7 +225,7 @@ function obras_render_lista_catalogos() {
     <div class="obras-lista">
         <h1>📚 Catálogos de Materiales</h1>
 
-        <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra' ), '📚 Nuevo catálogo' ); ?>
+        <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra&tipo_material=catalogo' ), '📚 Nuevo catálogo' ); ?>
 
         <?php if ( $query->have_posts() ) : ?>
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -269,7 +269,7 @@ function obras_render_lista_planos() {
     <div class="obras-lista">
         <h1>📐 Planos de Obra</h1>
 
-        <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra' ), '📐 Nuevo plano' ); ?>
+        <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra&tipo_material=plano' ), '📐 Nuevo plano' ); ?>
 
         <?php if ( $query->have_posts() ) : ?>
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
