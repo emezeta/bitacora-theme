@@ -170,80 +170,118 @@ function obras_prefill_tipo_material_from_url( $value, $post_id, $field ) {
 
 
 // ============================================================================
-// === AYUDA CONTEXTUAL EN CAMPO ARCHIVO (MATERIALES) =========================
+// === AYUDA CONTEXTUAL EN CAMPOS ACF DE ARCHIVO ==============================
 // ============================================================================
 
-add_action( 'admin_footer', 'obras_material_archivo_help_tooltip' );
-function obras_material_archivo_help_tooltip() {
-    // if ( ! is_admin() ) {
-    //     return;
-    // }
+add_action( 'admin_footer', 'obras_acf_file_field_help_tooltips' );
+function obras_acf_file_field_help_tooltips() {
+    if ( ! is_admin() ) {
+        return;
+    }
 
     $screen = get_current_screen();
     if ( ! $screen ) {
         return;
     }
 
-    if ( $screen->base !== 'post' ) {
+    if ( 'post' !== $screen->base ) {
         return;
     }
 
-    if ( $screen->post_type !== 'material_obra' ) {
+    $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
+    if ( ! in_array( $screen->post_type, $allowed_post_types, true ) ) {
         return;
     }
+
+    $help_map = array(
+        'archivo_adjunto' => 'Adjunta un archivo a esta nota. Quedará asociado a esta publicación y disponible dentro de Bitácora.',
+        'archivo_documento' => 'Adjunta un archivo a este documento. Quedará asociado a esta publicación y disponible dentro de Bitácora.',
+        'archivo_recurso' => 'Adjunta un archivo a esta publicación. Quedará asociado a este material y también disponible en la biblioteca de Bitácora.',
+    );
     ?>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var field = document.querySelector('.acf-field[data-name="archivo_recurso"]');
-        if (!field) {
-            return;
-        }
+        var helpMap = <?php echo wp_json_encode( $help_map ); ?>;
 
-        var label = field.querySelector('.acf-label label');
-        if (!label) {
-            return;
-        }
+        Object.keys(helpMap).forEach(function(fieldName) {
+            var field = document.querySelector('.acf-field[data-name="' + fieldName + '"]');
+            if (!field) {
+                return;
+            }
 
-        if (field.querySelector('.obras-help-trigger')) {
-            return;
-        }
+            var label = field.querySelector('.acf-label label');
+            var labelWrap = field.querySelector('.acf-label');
 
-        var trigger = document.createElement('button');
-        trigger.type = 'button';
-    trigger.className = 'obras-help-trigger';
-    trigger.setAttribute('aria-expanded', 'false');
-    trigger.setAttribute('title', 'Ayuda');
-    trigger.textContent = '?';
+            if (!label || !labelWrap) {
+                return;
+            }
 
-    var popup = document.createElement('div');
-    popup.className = 'obras-help-popup';
-    popup.hidden = true;
-    popup.innerHTML = 'Adjunta un archivo a esta publicación.<br>Quedará asociado a este material y también disponible en la biblioteca de Bitácora.';
+            if (field.querySelector('.obras-help-trigger')) {
+                return;
+            }
 
-    trigger.addEventListener('click', function(e) {
-        e.preventDefault();
-        var isHidden = popup.hidden;
-        popup.hidden = !isHidden;
-        trigger.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-    });
+            var trigger = document.createElement('button');
+            trigger.type = 'button';
+        trigger.className = 'obras-help-trigger';
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.setAttribute('title', 'Ayuda');
+        trigger.textContent = '?';
 
-    document.addEventListener('click', function(e) {
-        if (!field.contains(e.target)) {
-            popup.hidden = true;
-            trigger.setAttribute('aria-expanded', 'false');
-        }
-    });
+        var popup = document.createElement('div');
+        popup.className = 'obras-help-popup';
+        popup.hidden = true;
+        popup.innerHTML = helpMap[fieldName];
 
-    label.style.display = 'inline-flex';
-    label.style.alignItems = 'center';
-    label.style.gap = '8px';
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-    label.appendChild(trigger);
-    field.querySelector('.acf-label').appendChild(popup);
+            document.querySelectorAll('.obras-help-popup').forEach(function(otherPopup) {
+                if (otherPopup !== popup) {
+                    otherPopup.hidden = true;
+                }
+            });
+
+            document.querySelectorAll('.obras-help-trigger').forEach(function(otherTrigger) {
+                if (otherTrigger !== trigger) {
+                    otherTrigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            var isHidden = popup.hidden;
+            popup.hidden = !isHidden;
+            trigger.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        });
+
+        label.style.display = 'inline-flex';
+        label.style.alignItems = 'center';
+        label.style.gap = '8px';
+
+        label.appendChild(trigger);
+        labelWrap.appendChild(popup);
+        });
+
+        document.addEventListener('click', function(e) {
+            document.querySelectorAll('.acf-field .obras-help-popup').forEach(function(popup) {
+                var field = popup.closest('.acf-field');
+                if (field && !field.contains(e.target)) {
+                    popup.hidden = true;
+                }
+            });
+
+            document.querySelectorAll('.obras-help-trigger').forEach(function(trigger) {
+                var field = trigger.closest('.acf-field');
+                if (field && !field.contains(e.target)) {
+                    trigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
     });
     </script>
 
     <style>
+    .acf-field[data-name="archivo_adjunto"] .acf-label,
+    .acf-field[data-name="archivo_documento"] .acf-label,
     .acf-field[data-name="archivo_recurso"] .acf-label {
         position: relative;
     }
@@ -288,5 +326,3 @@ function obras_material_archivo_help_tooltip() {
     </style>
     <?php
 }
-
-
