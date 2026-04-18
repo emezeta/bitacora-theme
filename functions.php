@@ -19,6 +19,7 @@ require_once get_stylesheet_directory() . '/inc/cpt.php';
 require_once get_stylesheet_directory() . '/inc/acf.php';
 require_once get_stylesheet_directory() . '/inc/kiosk.php';
 require_once get_stylesheet_directory() . '/inc/admin-access.php';
+require_once get_stylesheet_directory() . '/inc/author-control.php';
 require_once get_stylesheet_directory() . '/inc/admin-dashboard.php';
 require_once get_stylesheet_directory() . '/inc/auth.php';
 require_once get_stylesheet_directory() . '/inc/restrict.php';
@@ -27,7 +28,6 @@ require_once get_stylesheet_directory() . '/inc/content-meta.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/landing.php';
 require_once get_stylesheet_directory() . '/inc/templates.php';
-
 
 // ============================================================================
 // === DESACTIVAR GUTENBERG / FORZAR CLASSIC EDITOR ===========================
