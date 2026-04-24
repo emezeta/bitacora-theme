@@ -29,7 +29,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
             ),
             array(
                 'key' => 'field_archivo',
-                'label' => 'Archivo Adjunto',
+                'label' => 'Adjuntar archivo',
                 'name' => 'archivo_adjunto',
                 'type' => 'file',
                 'return_format' => 'array',
@@ -67,7 +67,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
             ),
             array(
                 'key' => 'field_archivo_doc',
-                'label' => 'Archivo',
+                'label' => 'Adjuntar archivo',
                 'name' => 'archivo_documento',
                 'type' => 'file',
                 'return_format' => 'array',
@@ -107,7 +107,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
             ),
             array(
                 'key' => 'field_archivo_mat',
-                'label' => 'Archivo',
+                'label' => 'Adjuntar archivo',
                 'name' => 'archivo_recurso',
                 'type' => 'file',
                 'return_format' => 'array',
@@ -193,17 +193,63 @@ function obras_acf_file_field_help_tooltips() {
         return;
     }
 
-    $help_map = array(
-        'archivo_adjunto' => 'Adjunta un archivo a esta nota. Quedará asociado a esta publicación y disponible dentro de Bitácora.',
-        'archivo_documento' => 'Adjunta un archivo a este documento. Quedará asociado a esta publicación y disponible dentro de Bitácora.',
-        'archivo_recurso' => 'Adjunta un archivo a esta publicación. Quedará asociado a este material y también disponible en la biblioteca de Bitácora.',
+    $file_help_map = array(
+        'archivo_adjunto'  => 'Adjunta un archivo a esta publicación. No se inserta dentro del texto: quedará disponible como archivo adjunto al final.',
+        'archivo_documento' => 'Adjunta un archivo a esta publicación. No se inserta dentro del texto: quedará disponible como archivo adjunto al final.',
+        'archivo_recurso'   => 'Adjunta un archivo a esta publicación. No se inserta dentro del texto: quedará disponible como archivo adjunto al final.',
     );
+
+    $media_help = 'Usa “Añadir medios” para insertar una foto o imagen dentro del texto. Usa “Adjuntar archivo” para dejar un archivo asociado a la publicación.';
     ?>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var helpMap = <?php echo wp_json_encode( $help_map ); ?>;
+        var fileHelpMap = <?php echo wp_json_encode( $file_help_map ); ?>;
+        var mediaHelp   = <?php echo wp_json_encode( $media_help ); ?>;
 
-        Object.keys(helpMap).forEach(function(fieldName) {
+        function closeAllHelps(exceptPopup, exceptTrigger) {
+            document.querySelectorAll('.obras-help-popup').forEach(function(otherPopup) {
+                if (otherPopup !== exceptPopup) {
+                    otherPopup.hidden = true;
+                }
+            });
+
+            document.querySelectorAll('.obras-help-trigger').forEach(function(otherTrigger) {
+                if (otherTrigger !== exceptTrigger) {
+                    otherTrigger.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        function buildHelpTrigger(text) {
+            var trigger = document.createElement('button');
+            trigger.type = 'button';
+    trigger.className = 'obras-help-trigger';
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('title', 'Ayuda');
+    trigger.textContent = '?';
+
+    var popup = document.createElement('div');
+    popup.className = 'obras-help-popup';
+    popup.hidden = true;
+    popup.innerHTML = text;
+
+    trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var isHidden = popup.hidden;
+        closeAllHelps(popup, trigger);
+        popup.hidden = !isHidden;
+        trigger.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+
+    return { trigger: trigger, popup: popup };
+        }
+
+        // --------------------------------------------------------------------
+        // Ayuda en campos ACF de archivo
+        // --------------------------------------------------------------------
+        Object.keys(fileHelpMap).forEach(function(fieldName) {
             var field = document.querySelector('.acf-field[data-name="' + fieldName + '"]');
             if (!field) {
                 return;
@@ -220,58 +266,48 @@ function obras_acf_file_field_help_tooltips() {
                 return;
             }
 
-            var trigger = document.createElement('button');
-            trigger.type = 'button';
-        trigger.className = 'obras-help-trigger';
-        trigger.setAttribute('aria-expanded', 'false');
-        trigger.setAttribute('title', 'Ayuda');
-        trigger.textContent = '?';
+            var help = buildHelpTrigger(fileHelpMap[fieldName]);
 
-        var popup = document.createElement('div');
-        popup.className = 'obras-help-popup';
-        popup.hidden = true;
-        popup.innerHTML = helpMap[fieldName];
-
-        trigger.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            document.querySelectorAll('.obras-help-popup').forEach(function(otherPopup) {
-                if (otherPopup !== popup) {
-                    otherPopup.hidden = true;
-                }
-            });
-
-            document.querySelectorAll('.obras-help-trigger').forEach(function(otherTrigger) {
-                if (otherTrigger !== trigger) {
-                    otherTrigger.setAttribute('aria-expanded', 'false');
-                }
-            });
-
-            var isHidden = popup.hidden;
-            popup.hidden = !isHidden;
-            trigger.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-        });
-
-        label.style.display = 'inline-flex';
+            label.style.display = 'inline-flex';
         label.style.alignItems = 'center';
         label.style.gap = '8px';
 
-        label.appendChild(trigger);
-        labelWrap.appendChild(popup);
+        label.appendChild(help.trigger);
+        labelWrap.appendChild(help.popup);
         });
 
+        // --------------------------------------------------------------------
+        // Ayuda en botón "Añadir medios" del editor clásico
+        // --------------------------------------------------------------------
+        var mediaButton = document.querySelector('.wp-media-buttons .insert-media');
+        var mediaWrap   = document.querySelector('.wp-media-buttons');
+
+        if (mediaButton && mediaWrap && !mediaWrap.querySelector('.obras-media-help-anchor')) {
+            var anchor = document.createElement('span');
+            anchor.className = 'obras-media-help-anchor';
+    anchor.style.position = 'relative';
+    anchor.style.display = 'inline-flex';
+    anchor.style.alignItems = 'center';
+    anchor.style.marginLeft = '8px';
+
+    var mediaHelpParts = buildHelpTrigger(mediaHelp);
+
+    anchor.appendChild(mediaHelpParts.trigger);
+    anchor.appendChild(mediaHelpParts.popup);
+    mediaWrap.appendChild(anchor);
+        }
+
         document.addEventListener('click', function(e) {
-            document.querySelectorAll('.acf-field .obras-help-popup').forEach(function(popup) {
-                var field = popup.closest('.acf-field');
-                if (field && !field.contains(e.target)) {
+            document.querySelectorAll('.obras-help-popup').forEach(function(popup) {
+                var parent = popup.parentElement ? popup.parentElement.closest('.acf-field, .obras-media-help-anchor') : null;
+                if (parent && !parent.contains(e.target)) {
                     popup.hidden = true;
                 }
             });
 
             document.querySelectorAll('.obras-help-trigger').forEach(function(trigger) {
-                var field = trigger.closest('.acf-field');
-                if (field && !field.contains(e.target)) {
+                var parent = trigger.closest('.acf-field, .obras-media-help-anchor');
+                if (parent && !parent.contains(e.target)) {
                     trigger.setAttribute('aria-expanded', 'false');
                 }
             });
@@ -282,7 +318,8 @@ function obras_acf_file_field_help_tooltips() {
     <style>
     .acf-field[data-name="archivo_adjunto"] .acf-label,
     .acf-field[data-name="archivo_documento"] .acf-label,
-    .acf-field[data-name="archivo_recurso"] .acf-label {
+    .acf-field[data-name="archivo_recurso"] .acf-label,
+    .obras-media-help-anchor {
         position: relative;
     }
 
@@ -311,8 +348,12 @@ function obras_acf_file_field_help_tooltips() {
     }
 
     .obras-help-popup {
-        margin-top: 10px;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        z-index: 1000;
         max-width: 460px;
+        min-width: 260px;
         padding: 12px 14px;
         background: #fff;
         border: 1px solid #ccd0d4;

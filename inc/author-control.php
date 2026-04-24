@@ -1,6 +1,6 @@
 <?php
 /**
- * Bitácora de Obra - Control de autoría en creación/edición.
+ * Bitácora de Obra - Control de autoría
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -8,15 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Post types controlados por Bitácora.
- * Catálogos y Planos entran por material_obra.
+ * Post types de Bitácora.
  */
 function obras_author_locked_post_types() {
     return array( 'bitacora', 'documento_obra', 'material_obra' );
 }
 
 /**
- * Oculta el metabox "Autor" para usuarios no admin.
+ * Ocultar metabox "Autor" para no-admins.
  */
 add_action( 'add_meta_boxes', 'obras_hide_author_metabox_for_non_admin', 99, 2 );
 function obras_hide_author_metabox_for_non_admin( $post_type, $post ) {
@@ -33,15 +32,13 @@ function obras_hide_author_metabox_for_non_admin( $post_type, $post ) {
         return;
     }
 
-    // Lo removemos en todas las ubicaciones posibles por seguridad.
     remove_meta_box( 'authordiv', $post_type, 'normal' );
     remove_meta_box( 'authordiv', $post_type, 'side' );
     remove_meta_box( 'authordiv', $post_type, 'advanced' );
 }
 
 /**
- * Fuerza que el autor sea siempre el usuario logueado
- * cuando quien guarda NO es admin.
+ * Forzar autor = usuario logueado para no-admins.
  */
 add_filter( 'wp_insert_post_data', 'obras_force_current_user_as_author', 99, 2 );
 function obras_force_current_user_as_author( $data, $postarr ) {
@@ -49,6 +46,7 @@ function obras_force_current_user_as_author( $data, $postarr ) {
         return $data;
     }
 
+    // El admin conserva control total.
     if ( current_user_can( 'manage_options' ) ) {
         return $data;
     }
@@ -65,7 +63,6 @@ function obras_force_current_user_as_author( $data, $postarr ) {
         return $data;
     }
 
-    // Blindaje real del autor.
     $data['post_author'] = get_current_user_id();
 
     return $data;

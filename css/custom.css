@@ -248,6 +248,23 @@ body.register {
   margin-right: auto !important;
 }
 
+/* AU-02: el pie de ndmcp debe arrancar debajo de imágenes flotadas */
+.obras-acf-box {
+  clear: both;
+}
+
+.obras-acf-box::before,
+.obras-acf-box::after {
+  content: "";
+  display: table;
+}
+
+.obras-acf-box::after {
+  clear: both;
+}
+
+
+
 /* ============================================================================
  *  FIN
  *  ============================================================================ */
