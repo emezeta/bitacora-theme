@@ -28,9 +28,6 @@ function obras_block_admin_access() {
         $post_id = absint( $_REQUEST['post_ID'] );
     }
 
-<<<<<<< Updated upstream
-    $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
-=======
     $allowed_post_types = array(
         'bitacora',
         'documento_obra',
@@ -38,7 +35,6 @@ function obras_block_admin_access() {
         'catalogo_obra',
         'plano_obra',
     );
->>>>>>> Stashed changes
 
     // =========================================================================
     // Páginas base permitidas para usuarios no admin

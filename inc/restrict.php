@@ -26,19 +26,11 @@ add_action( 'template_redirect', 'obras_restrict_pages' );
 function obras_restrict_pages() {
 
     // =========================================================================
-<<<<<<< Updated upstream
-    // Bloquear acceso directo a CPT si no está logueado
-    // =========================================================================
-    if ( is_singular( array( 'bitacora', 'documento_obra', 'material_obra' ) ) ) {
-        if ( ! is_user_logged_in() ) {
-            wp_redirect( wp_login_url( get_permalink() ) );
-=======
     // Bloquear acceso directo a singles de los ndmcp si no está logueado
     // =========================================================================
     if ( is_singular( obras_get_protected_post_types() ) ) {
         if ( ! is_user_logged_in() ) {
             wp_safe_redirect( wp_login_url( get_permalink() ) );
->>>>>>> Stashed changes
             exit;
         }
     }

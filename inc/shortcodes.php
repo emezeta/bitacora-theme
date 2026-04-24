@@ -32,9 +32,6 @@ function obras_handle_frontend_trash_post() {
         wp_die( 'Post no encontrado.' );
     }
 
-<<<<<<< Updated upstream
-    $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
-=======
     $allowed_post_types = array(
         'bitacora',
         'documento_obra',
@@ -43,7 +40,6 @@ function obras_handle_frontend_trash_post() {
         'plano_obra',
     );
 
->>>>>>> Stashed changes
     if ( ! in_array( $post->post_type, $allowed_post_types, true ) ) {
         wp_die( 'Tipo de contenido no permitido.' );
     }
@@ -116,8 +112,6 @@ function obras_render_item_actions( $post_id ) {
     <?php
 }
 
-<<<<<<< Updated upstream
-=======
 function obras_render_post_class_badge( $post_id, $fallback = '' ) {
     if ( ! function_exists( 'obras_get_post_class_label' ) ) {
         if ( '' !== $fallback ) {
@@ -138,7 +132,6 @@ function obras_render_post_class_badge( $post_id, $fallback = '' ) {
     echo '<span class="tipo">' . esc_html( $label ) . '</span>';
 }
 
->>>>>>> Stashed changes
 
 // [obras_dashboard]
 add_shortcode( 'obras_dashboard', 'obras_render_dashboard_frontend' );
@@ -164,11 +157,7 @@ function obras_render_dashboard_frontend() {
 
     <a href="<?php echo esc_url( home_url( '/entradas/' ) ); ?>" class="obras-button secondary">
     <span class="icon">📋</span>
-<<<<<<< Updated upstream
-    Ver Notas
-=======
     Notas
->>>>>>> Stashed changes
     </a>
 
     <a href="<?php echo esc_url( home_url( '/documentos/' ) ); ?>" class="obras-button secondary">
@@ -214,11 +203,7 @@ function obras_render_lista_entradas() {
     ob_start();
     ?>
     <div class="obras-lista">
-<<<<<<< Updated upstream
-    <h1>📋 Notas de Bitácora</h1>
-=======
     <h1>📋 Notas</h1>
->>>>>>> Stashed changes
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=bitacora' ), '✍️ Nueva nota' ); ?>
 
@@ -267,11 +252,7 @@ function obras_render_lista_documentos() {
     <div class="obras-lista">
     <h1>📄 Documentos de Obra</h1>
 
-<<<<<<< Updated upstream
-    <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=documento_obra' ), '📄 Nuevo documento' ); ?>
-=======
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=documento_obra' ), 'Nuevo documento' ); ?>
->>>>>>> Stashed changes
 
     <?php if ( $query->have_posts() ) : ?>
     <?php while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -282,11 +263,7 @@ function obras_render_lista_documentos() {
     </a>
     </h3>
 
-<<<<<<< Updated upstream
-    <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_documento', true ) ?: 'Documento' ); ?></span>
-=======
     <?php obras_render_post_class_badge( get_the_ID(), 'Documento' ); ?>
->>>>>>> Stashed changes
 
     <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
@@ -317,15 +294,9 @@ function obras_render_lista_materiales() {
     ob_start();
     ?>
     <div class="obras-lista">
-<<<<<<< Updated upstream
-    <h1>🧰 Materiales y Recursos</h1>
-
-    <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra' ), '🧰 Nuevo material' ); ?>
-=======
     <h1>🧰 Materiales</h1>
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra' ), 'Nuevo material' ); ?>
->>>>>>> Stashed changes
 
     <?php if ( $query->have_posts() ) : ?>
     <?php while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -336,11 +307,7 @@ function obras_render_lista_materiales() {
     </a>
     </h3>
 
-<<<<<<< Updated upstream
-    <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Material' ); ?></span>
-=======
     <?php obras_render_post_class_badge( get_the_ID(), 'Material' ); ?>
->>>>>>> Stashed changes
 
     <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
@@ -362,38 +329,18 @@ function obras_render_lista_catalogos() {
     }
 
     $query = new WP_Query( array(
-<<<<<<< Updated upstream
-        'post_type'      => 'material_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'meta_query'     => array(
-            array(
-                'key'     => 'tipo_material',
-                'value'   => 'catalogo',
-                'compare' => '=',
-            ),
-        ),
-=======
         'post_type'      => 'catalogo_obra',
         'posts_per_page' => 50,
         'orderby'        => 'date',
         'order'          => 'DESC',
->>>>>>> Stashed changes
     ) );
 
     ob_start();
     ?>
     <div class="obras-lista">
-<<<<<<< Updated upstream
-    <h1>📚 Catálogos de Materiales</h1>
-
-    <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra&tipo_material=catalogo' ), '📚 Nuevo catálogo' ); ?>
-=======
     <h1>📚 Catálogos</h1>
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=catalogo_obra' ), 'Nuevo catálogo' ); ?>
->>>>>>> Stashed changes
 
     <?php if ( $query->have_posts() ) : ?>
     <?php while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -404,11 +351,7 @@ function obras_render_lista_catalogos() {
     </a>
     </h3>
 
-<<<<<<< Updated upstream
-    <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Catálogo' ); ?></span>
-=======
     <?php obras_render_post_class_badge( get_the_ID(), 'Catálogo' ); ?>
->>>>>>> Stashed changes
 
     <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
@@ -430,38 +373,18 @@ function obras_render_lista_planos() {
     }
 
     $query = new WP_Query( array(
-<<<<<<< Updated upstream
-        'post_type'      => 'material_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-        'meta_query'     => array(
-            array(
-                'key'     => 'tipo_material',
-                'value'   => 'plano',
-                'compare' => '=',
-            ),
-        ),
-=======
         'post_type'      => 'plano_obra',
         'posts_per_page' => 50,
         'orderby'        => 'date',
         'order'          => 'DESC',
->>>>>>> Stashed changes
     ) );
 
     ob_start();
     ?>
     <div class="obras-lista">
-<<<<<<< Updated upstream
-    <h1>📐 Planos de Obra</h1>
-
-    <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra&tipo_material=plano' ), '📐 Nuevo plano' ); ?>
-=======
     <h1>📐 Planos</h1>
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=plano_obra' ), 'Nuevo plano' ); ?>
->>>>>>> Stashed changes
 
     <?php if ( $query->have_posts() ) : ?>
     <?php while ( $query->have_posts() ) : $query->the_post(); ?>
@@ -472,11 +395,7 @@ function obras_render_lista_planos() {
     </a>
     </h3>
 
-<<<<<<< Updated upstream
-    <span class="tipo"><?php echo esc_html( get_post_meta( get_the_ID(), 'tipo_material', true ) ?: 'Plano' ); ?></span>
-=======
     <?php obras_render_post_class_badge( get_the_ID(), 'Plano' ); ?>
->>>>>>> Stashed changes
 
     <?php obras_render_item_actions( get_the_ID() ); ?>
     </div>
