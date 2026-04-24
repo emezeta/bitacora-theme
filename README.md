@@ -15,4 +15,3 @@
 **Plugins:** WP Super Cache, Advaced Custom Fields, Child Theme Configurator, Clasic Editor, WP Mail SMTP<br />
 **Version:** 0.1.0 - BETA<br />
 **Updated:** 2026-04-24 12:37:00 UTC-3<br />
-
