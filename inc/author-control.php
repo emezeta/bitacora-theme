@@ -11,7 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Post types de Bitácora.
  */
 function obras_author_locked_post_types() {
+<<<<<<< Updated upstream
     return array( 'bitacora', 'documento_obra', 'material_obra' );
+=======
+    return array(
+        'bitacora',
+        'documento_obra',
+        'material_obra',
+        'catalogo_obra',
+        'plano_obra',
+    );
+>>>>>>> Stashed changes
 }
 
 /**
@@ -23,7 +33,10 @@ function obras_hide_author_metabox_for_non_admin( $post_type, $post ) {
         return;
     }
 
+<<<<<<< Updated upstream
     // El admin sí puede elegir autor.
+=======
+>>>>>>> Stashed changes
     if ( current_user_can( 'manage_options' ) ) {
         return;
     }
@@ -46,7 +59,10 @@ function obras_force_current_user_as_author( $data, $postarr ) {
         return $data;
     }
 
+<<<<<<< Updated upstream
     // El admin conserva control total.
+=======
+>>>>>>> Stashed changes
     if ( current_user_can( 'manage_options' ) ) {
         return $data;
     }

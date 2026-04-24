@@ -28,6 +28,10 @@ require_once get_stylesheet_directory() . '/inc/content-meta.php';
 require_once get_stylesheet_directory() . '/inc/shortcodes.php';
 require_once get_stylesheet_directory() . '/inc/landing.php';
 require_once get_stylesheet_directory() . '/inc/templates.php';
+<<<<<<< Updated upstream
+=======
+require_once get_stylesheet_directory() . '/inc/editor-cleanup.php';
+>>>>>>> Stashed changes
 
 // ============================================================================
 // === DESACTIVAR GUTENBERG / FORZAR CLASSIC EDITOR ===========================

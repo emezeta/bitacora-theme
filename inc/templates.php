@@ -7,6 +7,21 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Slugs de páginas de listados frontend.
+ */
+if ( ! function_exists( 'obras_get_listado_page_slugs' ) ) {
+    function obras_get_listado_page_slugs() {
+        return array(
+            'entradas',
+            'documentos',
+            'materiales',
+            'catalogos',
+            'planos',
+        );
+    }
+}
+
 // ============================================================================
 // === FORZAR TEMPLATE PARA LISTADOS FRONTEND =================================
 // ============================================================================
@@ -17,17 +32,25 @@ function obras_force_page_template_for_listados( $template ) {
         return $template;
     }
 
-    $slugs = array( 'documentos', 'materiales', 'entradas' );
-    $slug = get_query_var( 'name' );
+    $slugs = obras_get_listado_page_slugs();
 
-    if ( in_array( $slug, $slugs, true ) ) {
-        $page = get_page_by_path( $slug );
-        if ( $page && $page->post_status === 'publish' && $page->post_type === 'page' ) {
-            $t = locate_template( 'page.php' );
-            if ( $t ) {
-                return $t;
-            }
-        }
+    if ( ! is_page( $slugs ) ) {
+        return $template;
+    }
+
+    $page = get_queried_object();
+
+    if ( ! $page instanceof WP_Post ) {
+        return $template;
+    }
+
+    if ( 'page' !== $page->post_type || 'publish' !== $page->post_status ) {
+        return $template;
+    }
+
+    $page_template = locate_template( 'page.php' );
+    if ( $page_template ) {
+        return $page_template;
     }
 
     return $template;

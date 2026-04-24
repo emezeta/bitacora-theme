@@ -21,9 +21,14 @@ if ( ! function_exists( 'obras_get_dashboard_url' ) ) {
  */
 if ( ! function_exists( 'obras_get_ndmcp_context' ) ) {
     function obras_get_ndmcp_context( $post = null ) {
+<<<<<<< Updated upstream
         $post_id       = 0;
         $post_type     = '';
         $tipo_material = '';
+=======
+        $post_id   = 0;
+        $post_type = '';
+>>>>>>> Stashed changes
 
         if ( is_numeric( $post ) ) {
             $post = get_post( (int) $post );
@@ -46,6 +51,7 @@ if ( ! function_exists( 'obras_get_ndmcp_context' ) ) {
             }
         }
 
+<<<<<<< Updated upstream
         if ( 'material_obra' === $post_type ) {
             if ( $post_id ) {
                 $tipo_material = (string) get_post_meta( $post_id, 'tipo_material', true );
@@ -60,6 +66,11 @@ if ( ! function_exists( 'obras_get_ndmcp_context' ) ) {
             'post_id'       => $post_id,
             'post_type'     => $post_type,
             'tipo_material' => $tipo_material,
+=======
+        return array(
+            'post_id'   => $post_id,
+            'post_type' => $post_type,
+>>>>>>> Stashed changes
         );
     }
 }
@@ -79,6 +90,7 @@ if ( ! function_exists( 'obras_get_list_url' ) ) {
                 return home_url( '/documentos/' );
 
             case 'material_obra':
+<<<<<<< Updated upstream
                 if ( 'catalogo' === $ctx['tipo_material'] ) {
                     return home_url( '/catalogos/' );
                 }
@@ -88,6 +100,15 @@ if ( ! function_exists( 'obras_get_list_url' ) ) {
                 }
 
                 return home_url( '/materiales/' );
+=======
+                return home_url( '/materiales/' );
+
+            case 'catalogo_obra':
+                return home_url( '/catalogos/' );
+
+            case 'plano_obra':
+                return home_url( '/planos/' );
+>>>>>>> Stashed changes
         }
 
         return obras_get_dashboard_url();
@@ -103,6 +124,7 @@ if ( ! function_exists( 'obras_get_list_label' ) ) {
 
         switch ( $ctx['post_type'] ) {
             case 'bitacora':
+<<<<<<< Updated upstream
                 return 'Lista de Notas';
 
             case 'documento_obra':
@@ -118,6 +140,21 @@ if ( ! function_exists( 'obras_get_list_label' ) ) {
                 }
 
                 return 'Lista de Materiales';
+=======
+                return 'Notas';
+
+            case 'documento_obra':
+                return 'Documentos';
+
+            case 'material_obra':
+                return 'Materiales';
+
+            case 'catalogo_obra':
+                return 'Catálogos';
+
+            case 'plano_obra':
+                return 'Planos';
+>>>>>>> Stashed changes
         }
 
         return 'Inicio';
@@ -125,8 +162,12 @@ if ( ! function_exists( 'obras_get_list_label' ) ) {
 }
 
 /**
+<<<<<<< Updated upstream
  * Renombrar submenú admin "Inicio" -> "Panel Bitácora".
  * Queda solo como panel interno para admin.
+=======
+ * Submenú admin interno.
+>>>>>>> Stashed changes
  */
 add_action( 'admin_menu', 'obras_add_dashboard_page' );
 function obras_add_dashboard_page() {
@@ -163,9 +204,17 @@ function obras_render_dashboard() {
 
     <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:30px;">
     <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=bitacora' ) ); ?>" class="button button-primary button-hero">✍️<br>Nueva Nota</a>
+<<<<<<< Updated upstream
     <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=bitacora' ) ); ?>" class="button button-secondary button-hero">📋<br>Ver Notas</a>
     <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=documento_obra' ) ); ?>" class="button button-secondary button-hero">📄<br>Documentos</a>
     <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=material_obra' ) ); ?>" class="button button-secondary button-hero">🧰<br>Materiales</a>
+=======
+    <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=bitacora' ) ); ?>" class="button button-secondary button-hero">📋<br>Notas</a>
+    <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=documento_obra' ) ); ?>" class="button button-secondary button-hero">📄<br>Documentos</a>
+    <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=material_obra' ) ); ?>" class="button button-secondary button-hero">🧰<br>Materiales</a>
+    <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=catalogo_obra' ) ); ?>" class="button button-secondary button-hero">📚<br>Catálogos</a>
+    <a href="<?php echo esc_url( admin_url( 'edit.php?post_type=plano_obra' ) ); ?>" class="button button-secondary button-hero">📐<br>Planos</a>
+>>>>>>> Stashed changes
     <a href="<?php echo esc_url( obras_get_dashboard_url() ); ?>" class="button button-secondary button-hero">🏠<br>Inicio</a>
     </div>
     </div>
@@ -185,7 +234,18 @@ function obras_render_editor_navigation_buttons( $post ) {
         return;
     }
 
+<<<<<<< Updated upstream
     $allowed_post_types = array( 'bitacora', 'documento_obra', 'material_obra' );
+=======
+    $allowed_post_types = array(
+        'bitacora',
+        'documento_obra',
+        'material_obra',
+        'catalogo_obra',
+        'plano_obra',
+    );
+
+>>>>>>> Stashed changes
     if ( ! in_array( $post->post_type, $allowed_post_types, true ) ) {
         return;
     }

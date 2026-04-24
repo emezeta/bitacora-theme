@@ -42,16 +42,20 @@ function obras_render_landing_page() {
         </div>
 
         <div class="obras-landing-features">
+<<<<<<< Updated upstream
             <div class="obras-feature obras-feature-locked" tabindex="0" role="button" aria-label="Notas rápidas">
+=======
+            <div class="obras-feature obras-feature-locked" tabindex="0" role="button" aria-label="Notas">
+>>>>>>> Stashed changes
                 <span class="icon">✍️</span>
-                <h3>Entradas Rápidas</h3>
+                <h3>Notas rápidas</h3>
                 <p>Registra actividades y novedades de obra en minutos</p>
             </div>
 
             <div class="obras-feature obras-feature-locked" tabindex="0" role="button" aria-label="Documentos">
                 <span class="icon">📄</span>
                 <h3>Documentos</h3>
-                <p>Accedé a planos, notas e instructivos cuando los necesites</p>
+                <p>Accedé a normas, descripciones, instructivos, permisos cuando los necesites</p>
             </div>
 
             <div class="obras-feature obras-feature-locked" tabindex="0" role="button" aria-label="Materiales">
