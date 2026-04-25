@@ -1,5 +1,5 @@
 # Bitácora de Obra
-## Presentación breve para usuarios ALFA / BETA
+## Presentación breve para usuarios
 
 Bitácora de Obra es una mini aplicación pensada para organizar información de obra de forma simple, directa y fácil de consultar.
 
@@ -55,7 +55,12 @@ El objetivo no es que todo esté perfecto, sino comprobar que Bitácora resulte:
 - fácil de aprender
 - fácil de usar en el día a día
 
+Bitácora puede ampliarse a otras áreas (costos, logística, mantenimiento, herramientas, gestión…) sin perder su esencia: simple, directa, sin necesidad de ser especialista. Pero no se orienta a atender proyectos enormes de grandes cargas de datos ni cientos de usuarios. Seguirá siendp una app liviana, para proyectos concretos, no para empresas gigantes.
+
 ## Idea final
 
-Bitácora no busca ser complicada ni técnica.  
-Busca ayudarte a registrar, consultar y ordenar información de obra de una manera simple.
+Bitácora no busca ser complicada ni técnica. 
+Busca ayudarnos a registrar, consultar y ordenar información de obra de una manera simple.
+
+
+Bitácora de Obra es un proyecto de la Cooperativa AEM78 "Angirü", 2026.
