@@ -55,7 +55,7 @@ El objetivo no es que todo esté perfecto, sino comprobar que Bitácora resulte:
 - fácil de aprender
 - fácil de usar en el día a día
 
-Bitácora puede ampliarse a otras áreas (costos, logística, mantenimiento, herramientas, gestión…) sin perder su esencia: simple, directa, sin necesidad de ser especialista. Pero no se orienta a atender proyectos enormes de grandes cargas de datos ni cientos de usuarios. Seguirá siendp una app liviana, para proyectos concretos, no para empresas gigantes.
+Bitácora puede ampliarse a otras áreas (costos, logística, mantenimiento, herramientas, gestión…) sin perder su esencia: simple, directa, sin necesidad de ser especialista. Pero no se orienta a atender proyectos enormes con gran cargas de datos ni cientos de usuarios. Seguirá siendo una app liviana, para proyectos concretos, no para empresas gigantes.
 
 ## Idea final
 
