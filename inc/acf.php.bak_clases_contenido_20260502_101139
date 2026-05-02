@@ -9,9 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'obras_get_document_class_choices' ) ) {
     function obras_get_document_class_choices() {
-        
         return array(
-            ''              => 'Sin clasificar',
             'memo'          => 'Memo',
             'instructivo'   => 'Instructivo',
             'informe'       => 'Informe',
@@ -22,23 +20,19 @@ if ( ! function_exists( 'obras_get_document_class_choices' ) ) {
 
 if ( ! function_exists( 'obras_get_bitacora_class_choices' ) ) {
     function obras_get_bitacora_class_choices() {
-        
         return array(
-            ''            => 'Sin clasificar',
+            'referencia'  => 'Referencia',
+            'tecnico'     => 'Técnico',
+            'explicacion' => 'Explicación',
             'observacion' => 'Observación',
             'novedad'     => 'Novedad',
-            'explicacion' => 'Explicación',
-            'referencia'  => 'Referencia',
-            'tecnico'     => 'Dato técnico',
         );
     }
 }
 
 if ( ! function_exists( 'obras_get_material_class_choices' ) ) {
     function obras_get_material_class_choices() {
-        
         return array(
-            ''            => 'Sin clasificar',
             'foto'        => 'Foto',
             'video'       => 'Video',
             'muestra'     => 'Muestra',
@@ -51,14 +45,12 @@ if ( ! function_exists( 'obras_get_material_class_choices' ) ) {
 
 if ( ! function_exists( 'obras_get_catalogo_plano_class_choices' ) ) {
     function obras_get_catalogo_plano_class_choices() {
-        
         return array(
-            ''            => 'Sin clasificar',
+            'referencia'  => 'Referencia',
+            'tecnico'     => 'Técnico',
+            'explicacion' => 'Explicación',
             'observacion' => 'Observación',
             'novedad'     => 'Novedad',
-            'explicacion' => 'Explicación',
-            'referencia'  => 'Referencia',
-            'tecnico'     => 'Dato técnico',
         );
     }
 }
@@ -121,7 +113,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'clase_nota',
                 'type' => 'select',
                 'choices' => obras_get_bitacora_class_choices(),
-                'allow_null' => 0,
+                'allow_null' => 1,
                 'return_format' => 'value',
             ),
             array(
@@ -157,7 +149,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'tipo_documento',
                 'type' => 'select',
                 'choices' => obras_get_document_class_choices(),
-                  'allow_null' => 0,
+                  'allow_null' => 1,
                   'return_format' => 'value',
             ),
             array(
@@ -193,7 +185,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'clase_material',
                 'type' => 'select',
                 'choices' => obras_get_material_class_choices(),
-                  'allow_null' => 0,
+                  'allow_null' => 1,
                   'return_format' => 'value',
             ),
             array(
@@ -235,7 +227,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'clase_catalogo',
                 'type' => 'select',
                 'choices' => obras_get_catalogo_plano_class_choices(),
-                  'allow_null' => 0,
+                  'allow_null' => 1,
                   'return_format' => 'value',
             ),
             array(
@@ -270,7 +262,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'name' => 'clase_plano',
                 'type' => 'select',
                 'choices' => obras_get_catalogo_plano_class_choices(),
-                  'allow_null' => 0,
+                  'allow_null' => 1,
                   'return_format' => 'value',
             ),
             array(

@@ -44,7 +44,7 @@ function obras_handle_frontend_trash_post() {
         wp_die( 'Tipo de contenido no permitido.' );
     }
 
-    if ( (int) $post->post_author !== get_current_user_id() && ! current_user_can( 'delete_post', $post_id ) ) {
+    if ( ! obras_user_can_manage_list_item( $post_id ) ) {
         wp_die( 'No tienes permiso para mover este contenido a la papelera.' );
     }
 
@@ -59,6 +59,41 @@ function obras_handle_frontend_trash_post() {
     exit;
 }
 
+
+
+if ( ! function_exists( 'obras_user_is_supervisor' ) ) {
+    function obras_user_is_supervisor() {
+        if ( ! is_user_logged_in() ) {
+            return false;
+        }
+
+        if ( current_user_can( 'manage_options' ) ) {
+            return true;
+        }
+
+        $user = wp_get_current_user();
+        if ( ! $user || empty( $user->roles ) ) {
+            return false;
+        }
+
+        return in_array( 'supervisor', (array) $user->roles, true );
+    }
+}
+
+if ( ! function_exists( 'obras_user_can_manage_list_item' ) ) {
+    function obras_user_can_manage_list_item( $post_id ) {
+        $post_id = (int) $post_id;
+        if ( ! $post_id || ! is_user_logged_in() ) {
+            return false;
+        }
+
+        if ( get_current_user_id() === (int) get_post_field( 'post_author', $post_id ) ) {
+            return true;
+        }
+
+        return obras_user_is_supervisor();
+    }
+}
 
 // ============================================================================
 // === SHORTCODES FRONTEND ====================================================
@@ -84,24 +119,27 @@ function obras_render_lista_actions( $new_url, $new_label ) {
 }
 
 /**
- * Renderiza acciones por item para el autor.
+ * Renderiza acciones por item para autor o supervisor.
  */
 function obras_render_item_actions( $post_id ) {
-    if ( get_current_user_id() !== (int) get_post_field( 'post_author', $post_id ) ) {
+    $post_id = (int) $post_id;
+    if ( ! obras_user_can_manage_list_item( $post_id ) ) {
         return;
     }
 
     $edit_url  = get_edit_post_link( $post_id );
     $trash_url = wp_nonce_url(
         admin_url( 'admin-post.php?action=obras_trash_post&post_id=' . $post_id ),
-                              'obras_trash_post_' . $post_id
+        'obras_trash_post_' . $post_id
     );
     ?>
     <div style="margin-top:10px; display:flex; gap:12px; flex-wrap:wrap;">
+    <?php if ( $edit_url ) : ?>
     <a href="<?php echo esc_url( $edit_url ); ?>"
     style="font-size:0.9em; color:#2271b1; text-decoration:none;">
     ✏️ Editar
     </a>
+    <?php endif; ?>
 
     <a href="<?php echo esc_url( $trash_url ); ?>"
     onclick="return confirm('¿Seguro que quieres mover este contenido a la papelera?');"
@@ -131,6 +169,185 @@ function obras_render_post_class_badge( $post_id, $fallback = '' ) {
 
     echo '<span class="tipo">' . esc_html( $label ) . '</span>';
 }
+
+
+function obras_get_post_creation_date_label( $post_id ) {
+    $post_id = (int) $post_id;
+    if ( ! $post_id ) {
+        return '';
+    }
+
+    $date_format = get_option( 'date_format' );
+    if ( ! $date_format ) {
+        $date_format = 'd/m/Y';
+    }
+
+    return get_the_date( $date_format, $post_id );
+}
+
+function obras_render_post_meta_line( $post_id ) {
+    $post_id = (int) $post_id;
+    if ( ! $post_id ) {
+        return;
+    }
+
+    $fecha = obras_get_post_creation_date_label( $post_id );
+    $autor = get_the_author_meta( 'display_name', (int) get_post_field( 'post_author', $post_id ) );
+
+    echo '<div class="meta">';
+
+    if ( '' !== $fecha ) {
+        echo '<span class="fecha">📅 ' . esc_html( $fecha ) . '</span>';
+    }
+
+    if ( '' !== $autor ) {
+        echo '<span class="author">✍️ ' . esc_html( $autor ) . '</span>';
+    }
+
+    echo '</div>';
+}
+
+
+function obras_current_user_can_manage_list_item( $post_id ) {
+    return obras_user_can_manage_list_item( $post_id );
+}
+
+function obras_get_post_status_label( $post_id ) {
+    $status = get_post_status( $post_id );
+
+    switch ( $status ) {
+        case 'publish':
+            return 'Publicado';
+        case 'draft':
+            return 'Borrador';
+        case 'private':
+            return 'Privado';
+    }
+
+    if ( is_string( $status ) && '' !== $status ) {
+        return ucfirst( $status );
+    }
+
+    return '';
+}
+
+function obras_render_post_status_badge( $post_id ) {
+    $post_id = (int) $post_id;
+    if ( ! $post_id || ! obras_current_user_can_manage_list_item( $post_id ) ) {
+        return;
+    }
+
+    $label = obras_get_post_status_label( $post_id );
+    if ( '' === $label ) {
+        return;
+    }
+
+    if ( 'Publicado' === $label ) {
+
+        return;
+
+    }
+
+
+    echo '<span class="tipo tipo-estado">' . esc_html( $label ) . '</span>';
+}
+
+function obras_get_frontend_list_posts( $post_type, $posts_per_page = 50 ) {
+    $post_type       = sanitize_key( $post_type );
+    $posts_per_page  = max( 1, (int) $posts_per_page );
+    $current_user_id = get_current_user_id();
+
+    $published_posts = get_posts( array(
+        'post_type'              => $post_type,
+        'post_status'            => array( 'publish' ),
+        'posts_per_page'         => $posts_per_page,
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'suppress_filters'       => false,
+        'no_found_rows'          => true,
+        'ignore_sticky_posts'    => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
+    ) );
+
+    $own_unpublished_posts = array();
+    if ( $current_user_id ) {
+        $own_unpublished_posts = get_posts( array(
+            'post_type'              => $post_type,
+            'post_status'            => array( 'draft', 'private' ),
+            'author'                 => $current_user_id,
+            'posts_per_page'         => $posts_per_page,
+            'orderby'                => 'date',
+            'order'                  => 'DESC',
+            'suppress_filters'       => false,
+            'no_found_rows'          => true,
+            'ignore_sticky_posts'    => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ) );
+    }
+
+    $merged = array();
+    foreach ( array_merge( $published_posts, $own_unpublished_posts ) as $post ) {
+        if ( $post instanceof WP_Post ) {
+            $merged[ $post->ID ] = $post;
+        }
+    }
+
+    uasort( $merged, function( $a, $b ) {
+        $time_a = strtotime( $a->post_date_gmt ?: $a->post_date );
+        $time_b = strtotime( $b->post_date_gmt ?: $b->post_date );
+
+        if ( $time_a === $time_b ) {
+            return 0;
+        }
+
+        return ( $time_a > $time_b ) ? -1 : 1;
+    } );
+
+    return array_slice( array_values( $merged ), 0, $posts_per_page );
+}
+
+function obras_get_list_item_url( $post_id ) {
+    $post_id = (int) $post_id;
+    if ( ! $post_id ) {
+        return '';
+    }
+
+    $status = get_post_status( $post_id );
+
+    if ( 'publish' !== $status ) {
+        $edit_url = get_edit_post_link( $post_id );
+        if ( $edit_url ) {
+            return $edit_url;
+        }
+    }
+
+    return get_permalink( $post_id );
+}
+
+function obras_render_list_item_title( $post_id, $fallback_title ) {
+    $post_id = (int) $post_id;
+    if ( ! $post_id ) {
+        return;
+    }
+
+    $title = get_the_title( $post_id );
+    if ( '' === $title ) {
+        $title = $fallback_title;
+    }
+
+    $url = obras_get_list_item_url( $post_id );
+
+    echo '<h3>';
+    if ( $url ) {
+        echo '<a href="' . esc_url( $url ) . '">' . esc_html( $title ) . '</a>';
+    } else {
+        echo esc_html( $title );
+    }
+    echo '</h3>';
+}
+
 
 
 // [obras_dashboard]
@@ -193,12 +410,7 @@ function obras_render_lista_entradas() {
         return '<p>Debes <a href="' . wp_login_url( get_permalink() ) . '">iniciar sesión</a> para ver el contenido.</p>';
     }
 
-    $query = new WP_Query( array(
-        'post_type'      => 'bitacora',
-        'posts_per_page' => 20,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+    $posts = obras_get_frontend_list_posts( 'bitacora', 20 );
 
     ob_start();
     ?>
@@ -207,23 +419,18 @@ function obras_render_lista_entradas() {
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=bitacora' ), '✍️ Nueva nota' ); ?>
 
-    <?php if ( $query->have_posts() ) : ?>
-    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+    <?php if ( ! empty( $posts ) ) : ?>
+    <?php foreach ( $posts as $list_post ) : ?>
     <div class="item">
-    <h3>
-    <a href="<?php the_permalink(); ?>">
-    <?php echo esc_html( get_the_title() ?: 'Nota sin título' ); ?>
-    </a>
-    </h3>
+    <?php obras_render_list_item_title( $list_post->ID, 'Nota sin título' ); ?>
 
-    <div class="meta">
-    <span class="fecha">📅 <?php echo esc_html( get_post_meta( get_the_ID(), 'fecha_obra', true ) ?: get_the_date( 'd/m/Y' ) ); ?></span>
-    <span class="author">✍️ <?php echo esc_html( get_the_author() ); ?></span>
-    </div>
+    <?php obras_render_post_meta_line( $list_post->ID ); ?>
+    <?php obras_render_post_class_badge( $list_post->ID ); ?>
+    <?php obras_render_post_status_badge( $list_post->ID ); ?>
 
-    <?php obras_render_item_actions( get_the_ID() ); ?>
+    <?php obras_render_item_actions( $list_post->ID ); ?>
     </div>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php endforeach; ?>
     <?php else : ?>
     <p class="empty">Aún no hay notas. ¡Sé el primero en crear una!</p>
     <?php endif; ?>
@@ -240,12 +447,7 @@ function obras_render_lista_documentos() {
         return '<p>Debes <a href="' . wp_login_url( get_permalink() ) . '">iniciar sesión</a> para ver el contenido.</p>';
     }
 
-    $query = new WP_Query( array(
-        'post_type'      => 'documento_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+    $posts = obras_get_frontend_list_posts( 'documento_obra', 50 );
 
     ob_start();
     ?>
@@ -254,20 +456,18 @@ function obras_render_lista_documentos() {
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=documento_obra' ), 'Nuevo documento' ); ?>
 
-    <?php if ( $query->have_posts() ) : ?>
-    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+    <?php if ( ! empty( $posts ) ) : ?>
+    <?php foreach ( $posts as $list_post ) : ?>
     <div class="item">
-    <h3>
-    <a href="<?php the_permalink(); ?>">
-    <?php echo esc_html( get_the_title() ?: 'Documento sin título' ); ?>
-    </a>
-    </h3>
+    <?php obras_render_list_item_title( $list_post->ID, 'Documento sin título' ); ?>
 
-    <?php obras_render_post_class_badge( get_the_ID(), 'Documento' ); ?>
+    <?php obras_render_post_meta_line( $list_post->ID ); ?>
+    <?php obras_render_post_class_badge( $list_post->ID, 'Documento' ); ?>
+    <?php obras_render_post_status_badge( $list_post->ID ); ?>
 
-    <?php obras_render_item_actions( get_the_ID() ); ?>
+    <?php obras_render_item_actions( $list_post->ID ); ?>
     </div>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php endforeach; ?>
     <?php else : ?>
     <p class="empty">Aún no hay documentos.</p>
     <?php endif; ?>
@@ -284,12 +484,7 @@ function obras_render_lista_materiales() {
         return '<p>Debes <a href="' . wp_login_url( get_permalink() ) . '">iniciar sesión</a> para ver el contenido.</p>';
     }
 
-    $query = new WP_Query( array(
-        'post_type'      => 'material_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+    $posts = obras_get_frontend_list_posts( 'material_obra', 50 );
 
     ob_start();
     ?>
@@ -298,20 +493,18 @@ function obras_render_lista_materiales() {
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=material_obra' ), 'Nuevo material' ); ?>
 
-    <?php if ( $query->have_posts() ) : ?>
-    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+    <?php if ( ! empty( $posts ) ) : ?>
+    <?php foreach ( $posts as $list_post ) : ?>
     <div class="item">
-    <h3>
-    <a href="<?php the_permalink(); ?>">
-    <?php echo esc_html( get_the_title() ?: 'Material sin título' ); ?>
-    </a>
-    </h3>
+    <?php obras_render_list_item_title( $list_post->ID, 'Material sin título' ); ?>
 
-    <?php obras_render_post_class_badge( get_the_ID(), 'Material' ); ?>
+    <?php obras_render_post_meta_line( $list_post->ID ); ?>
+    <?php obras_render_post_class_badge( $list_post->ID, 'Material' ); ?>
+    <?php obras_render_post_status_badge( $list_post->ID ); ?>
 
-    <?php obras_render_item_actions( get_the_ID() ); ?>
+    <?php obras_render_item_actions( $list_post->ID ); ?>
     </div>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php endforeach; ?>
     <?php else : ?>
     <p class="empty">Aún no hay materiales registrados.</p>
     <?php endif; ?>
@@ -328,12 +521,7 @@ function obras_render_lista_catalogos() {
         return '<p>Debes <a href="' . wp_login_url( get_permalink() ) . '">iniciar sesión</a> para ver el contenido.</p>';
     }
 
-    $query = new WP_Query( array(
-        'post_type'      => 'catalogo_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+    $posts = obras_get_frontend_list_posts( 'catalogo_obra', 50 );
 
     ob_start();
     ?>
@@ -342,20 +530,18 @@ function obras_render_lista_catalogos() {
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=catalogo_obra' ), 'Nuevo catálogo' ); ?>
 
-    <?php if ( $query->have_posts() ) : ?>
-    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+    <?php if ( ! empty( $posts ) ) : ?>
+    <?php foreach ( $posts as $list_post ) : ?>
     <div class="item">
-    <h3>
-    <a href="<?php the_permalink(); ?>">
-    <?php echo esc_html( get_the_title() ?: 'Catálogo sin título' ); ?>
-    </a>
-    </h3>
+    <?php obras_render_list_item_title( $list_post->ID, 'Catálogo sin título' ); ?>
 
-    <?php obras_render_post_class_badge( get_the_ID(), 'Catálogo' ); ?>
+    <?php obras_render_post_meta_line( $list_post->ID ); ?>
+    <?php obras_render_post_class_badge( $list_post->ID, 'Catálogo' ); ?>
+    <?php obras_render_post_status_badge( $list_post->ID ); ?>
 
-    <?php obras_render_item_actions( get_the_ID() ); ?>
+    <?php obras_render_item_actions( $list_post->ID ); ?>
     </div>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php endforeach; ?>
     <?php else : ?>
     <p class="empty">Aún no hay catálogos registrados.</p>
     <?php endif; ?>
@@ -372,12 +558,7 @@ function obras_render_lista_planos() {
         return '<p>Debes <a href="' . wp_login_url( get_permalink() ) . '">iniciar sesión</a> para ver el contenido.</p>';
     }
 
-    $query = new WP_Query( array(
-        'post_type'      => 'plano_obra',
-        'posts_per_page' => 50,
-        'orderby'        => 'date',
-        'order'          => 'DESC',
-    ) );
+    $posts = obras_get_frontend_list_posts( 'plano_obra', 50 );
 
     ob_start();
     ?>
@@ -386,20 +567,18 @@ function obras_render_lista_planos() {
 
     <?php obras_render_lista_actions( admin_url( 'post-new.php?post_type=plano_obra' ), 'Nuevo plano' ); ?>
 
-    <?php if ( $query->have_posts() ) : ?>
-    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+    <?php if ( ! empty( $posts ) ) : ?>
+    <?php foreach ( $posts as $list_post ) : ?>
     <div class="item">
-    <h3>
-    <a href="<?php the_permalink(); ?>">
-    <?php echo esc_html( get_the_title() ?: 'Plano sin título' ); ?>
-    </a>
-    </h3>
+    <?php obras_render_list_item_title( $list_post->ID, 'Plano sin título' ); ?>
 
-    <?php obras_render_post_class_badge( get_the_ID(), 'Plano' ); ?>
+    <?php obras_render_post_meta_line( $list_post->ID ); ?>
+    <?php obras_render_post_class_badge( $list_post->ID, 'Plano' ); ?>
+    <?php obras_render_post_status_badge( $list_post->ID ); ?>
 
-    <?php obras_render_item_actions( get_the_ID() ); ?>
+    <?php obras_render_item_actions( $list_post->ID ); ?>
     </div>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php endforeach; ?>
     <?php else : ?>
     <p class="empty">Aún no hay planos registrados.</p>
     <?php endif; ?>

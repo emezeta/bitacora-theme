@@ -49,6 +49,7 @@ function obras_block_admin_access() {
         'async-upload.php',
         'media-upload.php',
         'admin-ajax.php',
+        'admin-post.php',
     );
 
     if ( in_array( $current, $allowed_pages, true ) ) {
