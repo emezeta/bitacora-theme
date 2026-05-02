@@ -268,3 +268,121 @@ body.register {
 /* ============================================================================
  *  FIN
  *  ============================================================================ */
+
+
+/* ============================================================================
+ *  T4 - ALINEACIÓN DE IMÁGENES DEL EDITOR CLÁSICO / MEDIOS INSERTADOS
+ *  Mantiene en frontend las alineaciones guardadas por WordPress
+ *  ============================================================================ */
+
+.entry-content img,
+.entry-content figure,
+.entry-content .wp-caption,
+.wp-block-post-content img,
+.wp-block-post-content figure,
+.wp-block-post-content .wp-caption {
+  max-width: 100%;
+  height: auto;
+}
+
+.entry-content img.alignleft,
+.entry-content .wp-caption.alignleft,
+.entry-content figure.alignleft,
+.wp-block-post-content img.alignleft,
+.wp-block-post-content .wp-caption.alignleft,
+.wp-block-post-content figure.alignleft {
+  float: left;
+  margin: 0.35em 1.25em 1em 0;
+}
+
+.entry-content img.alignright,
+.entry-content .wp-caption.alignright,
+.entry-content figure.alignright,
+.wp-block-post-content img.alignright,
+.wp-block-post-content .wp-caption.alignright,
+.wp-block-post-content figure.alignright {
+  float: right;
+  margin: 0.35em 0 1em 1.25em;
+}
+
+.entry-content img.aligncenter,
+.entry-content .wp-caption.aligncenter,
+.entry-content figure.aligncenter,
+.wp-block-post-content img.aligncenter,
+.wp-block-post-content .wp-caption.aligncenter,
+.wp-block-post-content figure.aligncenter {
+  display: block;
+  float: none;
+  margin: 1em auto;
+}
+
+.entry-content img.alignnone,
+.entry-content .wp-caption.alignnone,
+.entry-content figure.alignnone,
+.wp-block-post-content img.alignnone,
+.wp-block-post-content .wp-caption.alignnone,
+.wp-block-post-content figure.alignnone {
+  float: none;
+  margin: 1em 0;
+}
+
+.entry-content .wp-caption,
+.wp-block-post-content .wp-caption {
+  box-sizing: border-box;
+}
+
+.entry-content .wp-caption img,
+.wp-block-post-content .wp-caption img {
+  display: block;
+  margin: 0;
+}
+
+.entry-content .wp-caption-text,
+.entry-content .wp-element-caption,
+.wp-block-post-content .wp-caption-text,
+.wp-block-post-content .wp-element-caption {
+  margin-top: 0.35em;
+  font-size: 0.95em;
+  color: var(--color-text-secondary, #666666);
+}
+
+.entry-content::after,
+.wp-block-post-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media (max-width: 768px) {
+  .entry-content img.alignleft,
+  .entry-content .wp-caption.alignleft,
+  .entry-content figure.alignleft,
+  .entry-content img.alignright,
+  .entry-content .wp-caption.alignright,
+  .entry-content figure.alignright,
+  .wp-block-post-content img.alignleft,
+  .wp-block-post-content .wp-caption.alignleft,
+  .wp-block-post-content figure.alignleft,
+  .wp-block-post-content img.alignright,
+  .wp-block-post-content .wp-caption.alignright,
+  .wp-block-post-content figure.alignright {
+    float: none;
+    display: block;
+    margin: 1em auto;
+  }
+}
+
+
+/* Enlaces del contenido en singles de ndmcp */
+.entry-content a,
+.wp-block-post-content a {
+  color:  #4093a6;
+}
+
+/* color: #00506a; */
+
+.entry-content a:hover,
+.wp-block-post-content a:hover {
+  color: #003d51;
+  text-decoration: underline;
+}
