@@ -1,3 +1,8 @@
+# OBSOLETO - La descripción ha quedado obsoleta. 
+<br />
+Una versión actual, está disponible en `Especificación Funcional.md`
+---
+
 Quiero un sitio para llevar anotaciones de campo en obras civiles de pequeño porte, para usuarios de 60 años o más, con una alfabetización digital de unos 25%.
 La portada deberá tener:
 

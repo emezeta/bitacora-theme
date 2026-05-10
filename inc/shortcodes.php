@@ -252,6 +252,7 @@ function obras_render_post_status_badge( $post_id ) {
     echo '<span class="tipo tipo-estado">' . esc_html( $label ) . '</span>';
 }
 
+/*
 function obras_get_frontend_list_posts( $post_type, $posts_per_page = 50 ) {
     $post_type       = sanitize_key( $post_type );
     $posts_per_page  = max( 1, (int) $posts_per_page );
@@ -307,6 +308,90 @@ function obras_get_frontend_list_posts( $post_type, $posts_per_page = 50 ) {
 
     return array_slice( array_values( $merged ), 0, $posts_per_page );
 }
+ */
+
+function obras_get_frontend_list_posts( $post_type, $posts_per_page = 50 ) {
+    $post_type       = sanitize_key( $post_type );
+    $posts_per_page  = max( 1, (int) $posts_per_page );
+    $current_user_id = get_current_user_id();
+
+    /*
+     * Supervisor/admin:
+     * ve publicados, borradores y privados de todos los autores.
+     */
+    if ( function_exists( 'obras_user_is_supervisor' ) && obras_user_is_supervisor() ) {
+        return get_posts( array(
+            'post_type'              => $post_type,
+            'post_status'            => array( 'publish', 'draft', 'private' ),
+            'posts_per_page'         => $posts_per_page,
+            'orderby'                => 'date',
+            'order'                  => 'DESC',
+            'suppress_filters'       => false,
+            'no_found_rows'          => true,
+            'ignore_sticky_posts'    => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ) );
+    }
+
+    /*
+     * Usuarios comunes:
+     * ven publicados de todos + borradores/privados propios.
+     */
+    $published_posts = get_posts( array(
+        'post_type'              => $post_type,
+        'post_status'            => array( 'publish' ),
+        'posts_per_page'         => $posts_per_page,
+        'orderby'                => 'date',
+        'order'                  => 'DESC',
+        'suppress_filters'       => false,
+        'no_found_rows'          => true,
+        'ignore_sticky_posts'    => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => false,
+    ) );
+
+    $own_unpublished_posts = array();
+
+    if ( $current_user_id ) {
+        $own_unpublished_posts = get_posts( array(
+            'post_type'              => $post_type,
+            'post_status'            => array( 'draft', 'private' ),
+            'author'                 => $current_user_id,
+            'posts_per_page'         => $posts_per_page,
+            'orderby'                => 'date',
+            'order'                  => 'DESC',
+            'suppress_filters'       => false,
+            'no_found_rows'          => true,
+            'ignore_sticky_posts'    => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ) );
+    }
+
+    $merged = array();
+
+    foreach ( array_merge( $published_posts, $own_unpublished_posts ) as $post ) {
+        if ( $post instanceof WP_Post ) {
+            $merged[ $post->ID ] = $post;
+        }
+    }
+
+    uasort( $merged, function( $a, $b ) {
+        $time_a = strtotime( $a->post_date_gmt ?: $a->post_date );
+        $time_b = strtotime( $b->post_date_gmt ?: $b->post_date );
+
+        if ( $time_a === $time_b ) {
+            return 0;
+        }
+
+        return ( $time_a > $time_b ) ? -1 : 1;
+    } );
+
+    return array_slice( array_values( $merged ), 0, $posts_per_page );
+}
+
+
 
 function obras_get_list_item_url( $post_id ) {
     $post_id = (int) $post_id;

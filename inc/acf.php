@@ -29,7 +29,10 @@ if ( ! function_exists( 'obras_get_bitacora_class_choices' ) ) {
             'novedad'     => 'Novedad',
             'explicacion' => 'Explicación',
             'referencia'  => 'Referencia',
-            'tecnico'     => 'Dato técnico',
+	    'tecnico'     => 'Dato técnico',
+	    'audio'       => 'Audio',
+	    'video'       => 'Video',
+	    'fotos'       => 'Foto Imágen',
         );
     }
 }

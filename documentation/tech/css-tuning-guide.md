@@ -1,3 +1,5 @@
+# OBSOLETO - Este material sirvió de base en las primeras etapas del proyecto
+
 # CSS Tuning Guide - Obras Angirü Kiosk WP
 
 Guía paso a paso para ajustar tamaños, espaciados y estilos en todo el sitio
