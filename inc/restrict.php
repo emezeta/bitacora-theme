@@ -22,13 +22,49 @@ if ( ! function_exists( 'obras_get_protected_post_types' ) ) {
     }
 }
 
+/**
+ * Determina si una publicación protegida puede verse públicamente.
+ *
+ * Regla:
+ * - Sólo aplica a publicaciones individuales de los ndmcp.
+ * - Sólo permite contenido publicado.
+ * - Sólo permite contenido marcado explícitamente con:
+ *
+ *     acceso_publico = 1
+ *
+ * Todo lo demás sigue requiriendo login.
+ */
+if ( ! function_exists( 'obras_is_public_single_content' ) ) {
+    function obras_is_public_single_content() {
+        if ( ! is_singular( obras_get_protected_post_types() ) ) {
+            return false;
+        }
+
+        $post_id = get_queried_object_id();
+        if ( ! $post_id ) {
+            return false;
+        }
+
+        if ( 'publish' !== get_post_status( $post_id ) ) {
+            return false;
+        }
+
+        return '1' === (string) get_post_meta( $post_id, 'acceso_publico', true );
+    }
+}
+
 add_action( 'template_redirect', 'obras_restrict_pages' );
 function obras_restrict_pages() {
 
     // =========================================================================
-    // Bloquear acceso directo a singles de los ndmcp si no está logueado
+    // Bloquear acceso directo a singles de los ndmcp si no está logueado,
+    // excepto publicaciones publicadas marcadas explícitamente como públicas.
     // =========================================================================
     if ( is_singular( obras_get_protected_post_types() ) ) {
+        if ( obras_is_public_single_content() ) {
+            return;
+        }
+
         if ( ! is_user_logged_in() ) {
             wp_safe_redirect( wp_login_url( get_permalink() ) );
             exit;
@@ -62,6 +98,15 @@ function obras_restrict_pages() {
         }
     }
 }
+
+
+// ===================================================================
+//
+// Oculta del menú las páginas restringidas por _allowed_users
+// No mostrar páginas hijas/protegidas del sector restringido a
+// usuarios que no estén autorizados.
+//
+// ===================================================================
 
 add_filter( 'wp_nav_menu_objects', 'obras_filter_menu', 10, 2 );
 function obras_filter_menu( $items, $args ) {

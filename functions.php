@@ -30,6 +30,7 @@ require_once get_stylesheet_directory() . '/inc/landing.php';
 require_once get_stylesheet_directory() . '/inc/templates.php';
 require_once get_stylesheet_directory() . '/inc/comments.php';
 require_once get_stylesheet_directory() . '/inc/admin-columns.php';
+require_once get_stylesheet_directory() . '/inc/pad.php';
 
 // ============================================================================
 // === DESACTIVAR GUTENBERG / FORZAR CLASSIC EDITOR ===========================

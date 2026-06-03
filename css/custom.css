@@ -452,3 +452,22 @@ body.single-catalogo_obra .gallery .gallery-caption {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ====================
+   formato para el PAD
+   ====================
+*/
+
+.obras-pad-test {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.obras-pad-test iframe {
+  display: block;
+  width: 100%;
+  height: 90vh;
+  min-height: 800px;
+  border: 0;
+}
